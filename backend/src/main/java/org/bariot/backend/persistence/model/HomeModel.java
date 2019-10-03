@@ -1,5 +1,6 @@
 package org.bariot.backend.persistence.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.bariot.backend.utils.IbasicInfo;
 
@@ -12,6 +13,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -37,7 +39,7 @@ public class HomeModel implements Serializable, IbasicInfo {
             inverseJoinColumns = {
                     @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")}
     )
-    private Set<UserModel> usersList;
+    private List<UserModel> usersList;
 
     public HomeModel() {
     }
@@ -74,15 +76,25 @@ public class HomeModel implements Serializable, IbasicInfo {
         }
     }
 
+    @Override
+    public long getCountOfSub() {
+        if (usersList == null)
+            return 0;
+        else
+            return usersList.size();
+    }
+
+    @Override
+    @JsonIgnore
+    public List<UserModel> getAllSubs() {
+        return usersList;
+    }
+
     public String getBrokerUrl() {
         return this.brokerUrl;
     }
 
     public void setBrokerUrl(String url) {
         this.brokerUrl = url;
-    }
-
-    private Set<UserModel> getUsersSet() {
-        return usersList;
     }
 }

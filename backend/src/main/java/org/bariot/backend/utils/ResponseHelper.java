@@ -8,6 +8,10 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @param <U> Model class
+ * @param <T> Repository class
+ */
 @SuppressWarnings("unchecked")
 public class ResponseHelper<U extends IbasicInfo, T extends JpaRepository<U, Long>> {
 
@@ -22,6 +26,20 @@ public class ResponseHelper<U extends IbasicInfo, T extends JpaRepository<U, Lon
         if (list != null && !list.isEmpty()) {
             return ResponseEntity.ok(list);
         } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    public <Model extends IbasicInfo> ResponseEntity<List<Model>> getParentsSub(long id) {
+        ResponseEntity<U> parent = getById(id);
+        try {
+            List<Model> list = parent.getBody().getAllSubs();
+            if (list != null && !list.isEmpty()) {
+                return ResponseEntity.ok(list);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -111,6 +129,25 @@ public class ResponseHelper<U extends IbasicInfo, T extends JpaRepository<U, Lon
         }
     }
 
+    public <ChildRepo extends JpaRepository, ChildModel extends IbasicInfo> ResponseEntity<ChildModel>
+    removeChildFromParent(Long idParent, Long idChild, ChildRepo childRepo) {
+
+        try {
+            Optional parentOpt = repository.findById(idParent);
+            Optional childOpt = childRepo.findById(idChild);
+            if (parentOpt.isPresent() && childOpt.isPresent()) {
+                U parent = (U) parentOpt.get();
+                ChildModel child = (ChildModel) childOpt.get();
+                if (parent.getAllSubs().remove(child)) {
+                    return ResponseEntity.ok(child);
+                }
+            }
+            return ResponseEntity.notFound().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     public ResponseEntity<U> deleteByIdOrName(String idOrName) {
         U entity = null;
         try {
@@ -125,6 +162,16 @@ public class ResponseHelper<U extends IbasicInfo, T extends JpaRepository<U, Lon
         if (entity != null) {
             repository.delete(entity);
             return ResponseEntity.ok(entity);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    public ResponseEntity<U> deleteById(Long id) {
+        Optional entityOpt = repository.findById(id);
+        if (entityOpt.isPresent()) {
+            repository.deleteById(id);
+            return ResponseEntity.ok((U) entityOpt.get());
         } else {
             return ResponseEntity.notFound().build();
         }

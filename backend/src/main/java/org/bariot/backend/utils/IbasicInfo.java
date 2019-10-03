@@ -1,5 +1,7 @@
 package org.bariot.backend.utils;
 
+import java.util.List;
+
 public interface IbasicInfo<U> {
 
     long getId();
@@ -7,4 +9,8 @@ public interface IbasicInfo<U> {
     String getName();
 
     boolean addToSubSet(U item);
+
+    long getCountOfSub();
+
+    List<U> getAllSubs();
 }

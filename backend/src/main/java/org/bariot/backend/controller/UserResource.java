@@ -7,6 +7,7 @@ import org.bariot.backend.persistence.repo.UsersRepository;
 import org.bariot.backend.utils.ResponseHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +23,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 @Transactional
-public class UsersResource {
+public class UserResource {
+
+    public static final String USER_MAPPING = "/users";
 
     @Autowired
     private UsersRepository usersRepository;
@@ -38,7 +41,7 @@ public class UsersResource {
     }
 
     @GetMapping()
-    public ResponseEntity<List<UserModel>> getAllStudents() {
+    public ResponseEntity<List<UserModel>> getAllUsers() {
         return helper.getAll();
     }
 
@@ -66,15 +69,7 @@ public class UsersResource {
         return helper.getByIdOrName(idOrName);
     }
 
-    @GetMapping("/gethomes/{idOrName}")
-    public ResponseEntity<List<HomeModel>> getHomes(@PathVariable("idOrName") String idOrName) {
-        return helper.getAllSub(homesRepository);
-    }
 
-    @GetMapping("/{idParent}/addHome/{idChild}")
-    public ResponseEntity<HomeModel> addHome(@PathVariable("idParent") String idParent, @PathVariable("idChild") String idChild) {
-        return helper.addSubEntity(Long.parseLong(idParent), Long.parseLong(idChild), homesRepository);
-    }
 
 
 }

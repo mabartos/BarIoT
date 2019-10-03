@@ -5,10 +5,9 @@ import org.bariot.backend.persistence.repo.HomesRepository;
 import org.bariot.backend.utils.ResponseHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,38 +15,28 @@ import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.util.List;
 
+@Transactional
 @RestController
 @RequestMapping("/homes")
-@Transactional
-public class HomesResource {
+public class HomeResource {
 
     @Autowired
-    private HomesRepository homesRepository;
+    HomesRepository homesRepo;
 
     private ResponseHelper<HomeModel, HomesRepository> helper;
 
     @PostConstruct
     public void init() {
-        helper = new ResponseHelper<>(homesRepository);
+        helper = new ResponseHelper<>(homesRepo);
     }
 
     @GetMapping()
-    public List<HomeModel> getAllHomes() {
-        return homesRepository.findAll();
+    public ResponseEntity<List<HomeModel>> getHomes() {
+        return helper.getAll();
     }
 
-    @GetMapping("/{idOrName}")
-    public ResponseEntity<HomeModel> getHomeByIdOrName(@PathVariable("idOrName") String idOrName) {
-        return helper.getByIdOrName(idOrName);
-    }
-
-    @PostMapping()
-    public ResponseEntity<HomeModel> createHome(@RequestBody HomeModel home) {
-        return helper.create(home);
-    }
-
-    @GetMapping("/delete/{idOrName}")
-    public ResponseEntity<HomeModel> deleteHome(@PathVariable("idOrName") String idOrName) {
-        return helper.deleteByIdOrName(idOrName);
+    @DeleteMapping("/{id:[\\d]+]}")
+    public ResponseEntity<HomeModel> deleteHome(@PathVariable("id") Long id) {
+        return helper.deleteById(id);
     }
 }

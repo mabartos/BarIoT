@@ -1,5 +1,6 @@
 package org.bariot.backend.persistence.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.bariot.backend.utils.IbasicInfo;
 
@@ -12,7 +13,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "USERS")
@@ -40,7 +41,7 @@ public class UserModel implements Serializable, IbasicInfo {
             inverseJoinColumns = {
                     @JoinColumn(name = "HOME_ID", referencedColumnName = "HOME_ID")}
     )
-    private Set<HomeModel> homesList;
+    private List<HomeModel> homesList;
 
     public UserModel() {
     }
@@ -61,6 +62,7 @@ public class UserModel implements Serializable, IbasicInfo {
     }
 
     @Override
+    @JsonIgnore
     public String getName() {
         return getUsername();
     }
@@ -76,6 +78,20 @@ public class UserModel implements Serializable, IbasicInfo {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    @Override
+    public long getCountOfSub() {
+        if (homesList == null)
+            return 0;
+        else
+            return homesList.size();
+    }
+
+    @Override
+    @JsonIgnore
+    public List<HomeModel> getAllSubs() {
+        return homesList;
     }
 
     public String getUsername() {
@@ -96,10 +112,6 @@ public class UserModel implements Serializable, IbasicInfo {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public Set<HomeModel> getHomesSet() {
-        return homesList;
     }
 
 }
