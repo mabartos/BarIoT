@@ -1,13 +1,10 @@
 package org.bariot.backend.controller;
 
-import org.bariot.backend.persistence.model.HomeModel;
 import org.bariot.backend.persistence.model.UserModel;
-import org.bariot.backend.persistence.repo.HomesRepository;
 import org.bariot.backend.persistence.repo.UsersRepository;
 import org.bariot.backend.utils.ResponseHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,9 +26,6 @@ public class UserResource {
 
     @Autowired
     private UsersRepository usersRepository;
-
-    @Autowired
-    private HomesRepository homesRepository;
 
     private ResponseHelper<UserModel, UsersRepository> helper;
 
@@ -68,8 +62,4 @@ public class UserResource {
     public ResponseEntity<UserModel> getUserByIdOrName(@PathVariable("idOrName") String idOrName) {
         return helper.getByIdOrName(idOrName);
     }
-
-
-
-
 }

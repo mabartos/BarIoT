@@ -14,6 +14,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "USERS")
@@ -114,5 +115,26 @@ public class UserModel implements Serializable, IbasicInfo {
         this.lastName = lastName;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        else if (!(obj instanceof UserModel))
+            return false;
+        else {
+            UserModel object = (UserModel) obj;
+            return (object.getId() == this.getId()
+                    && object.getName().equals(this.getName())
+                    && object.getCountOfSub() == this.getCountOfSub()
+                    && object.getFirstName().equals(this.getFirstName())
+                    && object.getLastName().equals(this.getLastName())
+            );
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userName, firstName, lastName);
+    }
 }
 

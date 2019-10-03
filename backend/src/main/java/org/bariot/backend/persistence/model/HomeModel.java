@@ -14,7 +14,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
+import java.util.Objects;
 
 @Entity
 @Table(name = "HOMES")
@@ -96,5 +96,26 @@ public class HomeModel implements Serializable, IbasicInfo {
 
     public void setBrokerUrl(String url) {
         this.brokerUrl = url;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        else if (!(obj instanceof HomeModel))
+            return false;
+        else {
+            HomeModel object = (HomeModel) obj;
+            return (object.getId() == this.getId()
+                    && object.getName().equals(this.getName())
+                    && object.getCountOfSub() == this.getCountOfSub()
+                    && object.getBrokerUrl().equals(this.getBrokerUrl())
+            );
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, brokerUrl);
     }
 }

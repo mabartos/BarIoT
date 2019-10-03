@@ -35,7 +35,7 @@ public class HomeResource {
         return helper.getAll();
     }
 
-    @DeleteMapping("/{id:[\\d]+]}")
+    @DeleteMapping("/{id:[\\d]+}")
     public ResponseEntity<HomeModel> deleteHome(@PathVariable("id") Long id) {
         return helper.deleteById(id);
     }
