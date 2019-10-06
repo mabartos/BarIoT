@@ -2,6 +2,7 @@ package org.bariot.backend.controller;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.bariot.backend.persistence.model.HomeModel;
+import org.bariot.backend.persistence.model.RoomModel;
 import org.bariot.backend.persistence.model.UserModel;
 import org.bariot.backend.persistence.repo.HomesRepository;
 import org.bariot.backend.persistence.repo.UsersRepository;
@@ -75,4 +76,5 @@ public class UserHomeResource {
     public ResponseEntity<HomeModel> getHomeByID(@PathVariable("id") Long id, @PathVariable("idHome") Long idHome) {
         return helperUser.getSubByID(id, idHome, homesRepo);
     }
+
 }

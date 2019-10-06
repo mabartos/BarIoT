@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.List;
@@ -40,6 +41,9 @@ public class HomeModel implements Serializable, IbasicInfo {
                     @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")}
     )
     private List<UserModel> usersList;
+
+    @OneToMany(targetEntity = RoomModel.class, mappedBy = "home")
+    private List<RoomModel> roomsList;
 
     public HomeModel() {
     }
@@ -117,5 +121,9 @@ public class HomeModel implements Serializable, IbasicInfo {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, brokerUrl);
+    }
+
+    public List<RoomModel> getRoomsList() {
+        return roomsList;
     }
 }
