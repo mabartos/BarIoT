@@ -166,10 +166,9 @@ public class ResponseHelper<U extends IbasicInfo, T extends JpaRepository<U, Lon
         U created = repository.save(entity);
         if (created != null) {
             URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                    .path("/{id}")
-                    .buildAndExpand(entity.getId())
+                    .buildAndExpand(created.getId())
                     .toUri();
-            return ResponseEntity.created(uri).body(entity);
+            return ResponseEntity.created(uri).body(created);
         } else {
             return ResponseEntity.notFound().build();
         }

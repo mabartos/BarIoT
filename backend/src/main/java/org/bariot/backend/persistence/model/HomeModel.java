@@ -24,7 +24,7 @@ import java.util.Objects;
 public class HomeModel implements Serializable, IbasicInfo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "HOME_ID")
     private Long id;
 
@@ -59,7 +59,7 @@ public class HomeModel implements Serializable, IbasicInfo {
     }
 
     @Override
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 

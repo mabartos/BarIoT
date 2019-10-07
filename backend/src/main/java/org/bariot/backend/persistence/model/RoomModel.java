@@ -3,12 +3,14 @@ package org.bariot.backend.persistence.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.bariot.backend.utils.IbasicInfo;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.List;
@@ -31,6 +33,9 @@ public class RoomModel implements Serializable, IbasicInfo {
     @JoinColumn(name = "HOME_ID", nullable = false)
     private HomeModel home;
 
+    @OneToMany(cascade = CascadeType.ALL, targetEntity = DeviceModel.class, mappedBy = "room")
+    private List<DeviceModel> listDevices;
+
     public RoomModel() {
     }
 
@@ -39,7 +44,7 @@ public class RoomModel implements Serializable, IbasicInfo {
     }
 
     @Override
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 
@@ -50,7 +55,7 @@ public class RoomModel implements Serializable, IbasicInfo {
 
     @Override
     public boolean addToSubSet(Object item) {
-        /*try {
+        try {
             if (item instanceof DeviceModel) {
                 listDevices.add((DeviceModel) item);
                 return true;
@@ -59,27 +64,19 @@ public class RoomModel implements Serializable, IbasicInfo {
         } catch (Exception e) {
             return false;
         }
-
-         */
-        return true;
     }
 
     @Override
     public long getCountOfSub() {
-
-       /* if (listDevices == null)
+        if (listDevices == null)
             return 0;
         else
             return listDevices.size();
-
-        */
-        return 1;
     }
 
     @Override
     public List getAllSubs() {
-        //return listDevices;
-        return null;
+        return listDevices;
     }
 
     @Override
@@ -101,5 +98,9 @@ public class RoomModel implements Serializable, IbasicInfo {
     @Override
     public int hashCode() {
         return Objects.hash(id, name);
+    }
+
+    public List<DeviceModel> getListDevices() {
+        return listDevices;
     }
 }

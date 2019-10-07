@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface IbasicInfo<U> {
 
-    long getId();
+    Long getId();
 
     String getName();
 

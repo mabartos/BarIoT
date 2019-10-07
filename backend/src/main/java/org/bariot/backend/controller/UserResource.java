@@ -58,9 +58,8 @@ public class UserResource {
         return helper.deleteById(idOrName);
     }
 
-
-    @GetMapping("/{idOrName}")
-    public ResponseEntity<UserModel> getUserByIdOrName(@PathVariable("idOrName") String idOrName) {
-        return helper.getByIdOrName(idOrName);
+    @GetMapping("/{id}")
+    public ResponseEntity<UserModel> getUserById(@PathVariable("id") long id) {
+        return helper.getById(id);
     }
 }

@@ -61,7 +61,7 @@ public class UserModel implements Serializable, IbasicInfo {
     }
 
     @Override
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 
