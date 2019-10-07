@@ -30,10 +30,8 @@ public class UserHomeResource {
     private static final String HOME_BASIC_URL = "/{id:[\\d]+}/homes";
     private static final String HOME_ID = "/{idHome:[\\d]+}";
 
-
     @JsonIgnore
-    public static final String HOME_MAPPING = UserResource.USER_MAPPING + HOME_BASIC_URL;
-
+    public static final String HOME_MAPPING = UserResource.USER_MAPPING + HOME_BASIC_URL + HOME_ID;
 
     @Autowired
     private HomesRepository homesRepo;
@@ -48,6 +46,12 @@ public class UserHomeResource {
     public void init() {
         helperHome = new ResponseHelper<>(homesRepo);
         helperUser = new ResponseHelper<>(userRepo);
+    }
+
+    public UserHomeResource(UsersRepository userRepo, HomesRepository homesRepo) {
+        helperUser = new ResponseHelper<>(userRepo);
+        this.userRepo = userRepo;
+        this.homesRepo = homesRepo;
     }
 
     // Basic operations
@@ -70,7 +74,6 @@ public class UserHomeResource {
     public ResponseEntity<HomeModel> removeHomeFromUser(@PathVariable("id") Long id, @PathVariable("idHome") Long idHome) {
         return helperUser.removeChildFromParent(id, idHome, homesRepo);
     }
-
 
     @GetMapping(HOME_BASIC_URL + HOME_ID)
     public ResponseEntity<HomeModel> getHomeByID(@PathVariable("id") Long id, @PathVariable("idHome") Long idHome) {

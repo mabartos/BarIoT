@@ -41,7 +41,7 @@ public class UserResource {
 
     @PostMapping("/{username}")
     public ResponseEntity<UserModel> createUserByUsername(@PathVariable("username") String username) {
-        UserModel user = new UserModel();
+        UserModel user = new UserModel(username);
         if (usersRepository.save(user) != null)
             return ResponseEntity.ok(user);
         else
@@ -53,10 +53,11 @@ public class UserResource {
         return helper.create(user);
     }
 
-    @DeleteMapping("/{idOrName}")
-    public ResponseEntity<UserModel> deleteUser(@PathVariable("idOrName") String idOrName) {
-        return helper.deleteByIdOrName(idOrName);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<UserModel> deleteUser(@PathVariable("id") Long idOrName) {
+        return helper.deleteById(idOrName);
     }
+
 
     @GetMapping("/{idOrName}")
     public ResponseEntity<UserModel> getUserByIdOrName(@PathVariable("idOrName") String idOrName) {

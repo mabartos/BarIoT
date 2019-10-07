@@ -7,6 +7,7 @@ import org.bariot.backend.utils.IbasicInfo;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -22,8 +23,8 @@ import java.util.Objects;
 public class UserModel implements Serializable, IbasicInfo {
 
     @Id
-    @GeneratedValue
-    @Column(name = "USER_ID")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "USER_ID", unique = true)
     private long id;
 
     @Column(name = "USER_NAME", nullable = false, unique = true)
@@ -49,6 +50,8 @@ public class UserModel implements Serializable, IbasicInfo {
 
     public UserModel(String username) {
         this.userName = username;
+        this.firstName = null;
+        this.lastName = null;
     }
 
     public UserModel(String username, String firstName, String lastName) {
