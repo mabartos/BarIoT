@@ -5,6 +5,7 @@ import java.util.List;
 public interface IbasicInfo<U> {
 
     Long getId();
+    void setId(Long id);
 
     String getName();
 

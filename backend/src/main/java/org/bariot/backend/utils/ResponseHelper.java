@@ -296,4 +296,14 @@ public class ResponseHelper<U extends IbasicInfo, T extends JpaRepository<U, Lon
             return ResponseEntity.notFound().build();
         }
     }
+
+    public ResponseEntity<U> update(Long id, U model) {
+        Optional entityOpt = repository.findById(id);
+        if (entityOpt.isPresent()) {
+            model.setId(id);
+            repository.save(model);
+            return ResponseEntity.ok(model);
+        }
+        return ResponseEntity.notFound().build();
+    }
 }

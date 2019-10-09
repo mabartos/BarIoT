@@ -121,6 +121,11 @@ public class UserModel implements Serializable, IbasicInfo {
     }
 
     @Override
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;

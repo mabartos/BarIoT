@@ -44,6 +44,11 @@ public class DeviceModel implements Serializable, IbasicInfo {
     }
 
     @Override
+    public void setId(Long id) {
+        this.id=id;
+    }
+
+    @Override
     public String getName() {
         return this.name;
     }
