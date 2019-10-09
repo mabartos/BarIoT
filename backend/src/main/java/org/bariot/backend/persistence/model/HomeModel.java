@@ -6,6 +6,7 @@ import org.bariot.backend.utils.IbasicInfo;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.List;
@@ -24,7 +26,8 @@ import java.util.Objects;
 public class HomeModel implements Serializable, IbasicInfo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "home_sequence", sequenceName = "home_seq", allocationSize = 100)
+    @GeneratedValue(generator = "home_sequence")
     @Column(name = "HOME_ID")
     private Long id;
 
@@ -34,7 +37,7 @@ public class HomeModel implements Serializable, IbasicInfo {
     @Column(name = "BROKER")
     private String brokerUrl;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "HOMES_USERS",
             joinColumns = {
                     @JoinColumn(name = "HOME_ID", referencedColumnName = "HOME_ID")},

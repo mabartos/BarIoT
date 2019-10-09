@@ -2,10 +2,10 @@ package org.bariot.backend.controller;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.bariot.backend.persistence.model.HomeModel;
-import org.bariot.backend.persistence.model.RoomModel;
 import org.bariot.backend.persistence.model.UserModel;
 import org.bariot.backend.persistence.repo.HomesRepository;
 import org.bariot.backend.persistence.repo.UsersRepository;
+import org.bariot.backend.utils.IbasicInfo;
 import org.bariot.backend.utils.ResponseHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -70,9 +70,19 @@ public class UserHomeResource {
             return ResponseEntity.notFound().build();
     }
 
+    @PostMapping(HOME_BASIC_URL + HOME_ID)
+    public ResponseEntity<HomeModel> addExistingHome(@PathVariable("id") Long id, @PathVariable("idHome") Long idHome) {
+        return helperUser.addExistingChild(id, idHome, helperHome);
+    }
+
     @DeleteMapping(HOME_BASIC_URL + HOME_ID)
     public ResponseEntity<HomeModel> removeHomeFromUser(@PathVariable("id") Long id, @PathVariable("idHome") Long idHome) {
         return helperUser.removeChildFromParent(id, idHome, homesRepo);
+    }
+
+    @DeleteMapping(HOME_BASIC_URL)
+    public ResponseEntity<Void> removeAllHomesFromUser(@PathVariable("id") Long id) {
+        return helperUser.removeAllChildrenFromParent(id, helperHome);
     }
 
     @GetMapping(HOME_BASIC_URL + HOME_ID)

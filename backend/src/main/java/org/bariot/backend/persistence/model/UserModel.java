@@ -6,12 +6,13 @@ import org.bariot.backend.utils.IbasicInfo;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.List;
@@ -23,7 +24,8 @@ import java.util.Objects;
 public class UserModel implements Serializable, IbasicInfo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "user_sequence", sequenceName = "user_seq", allocationSize = 100)
+    @GeneratedValue(generator = "user_sequence")
     @Column(name = "USER_ID", unique = true)
     private long id;
 
@@ -36,7 +38,7 @@ public class UserModel implements Serializable, IbasicInfo {
     @Column(name = "LAST_NAME")
     private String lastName;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "USERS_HOMES",
             joinColumns = {
                     @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")},

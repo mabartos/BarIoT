@@ -1,5 +1,6 @@
 package org.bariot.backend;
 
+import org.bariot.backend.controller.HomeResource;
 import org.bariot.backend.controller.UserHomeResource;
 import org.bariot.backend.controller.UserResource;
 import org.bariot.backend.persistence.model.HomeModel;
@@ -37,6 +38,9 @@ public class GeneralTest {
 
     @Autowired
     private UserHomeResource userHomeResource;
+
+    @Autowired
+    private HomeResource homeResource;
 
     private UserModel user1, user2;
 
@@ -91,7 +95,6 @@ public class GeneralTest {
     }
 
     @Test
-    @Ignore
     public void createHomes() {
         HomeModel home1 = null;
         HomeModel home2 = null;
@@ -104,19 +107,20 @@ public class GeneralTest {
             Assert.assertEquals(user2model, user2);
 
             HomeModel home1created = new HomeModel("home1");
-            home1 = userHomeResource.createHome(user1.getId(), home1created).getBody();
-
+            home1 = homeResource.createHome(home1created).getBody();
             Assert.assertNotNull(home1);
             Assert.assertEquals(home1, home1created);
+            userHomeResource.addExistingHome(user1.getId(), home1.getId());
 
             UserModel user = userResource.getUserById(user1.getId()).getBody();
             Assert.assertNotNull(user);
             Assert.assertEquals(1, user.getCountOfSub());
 
             HomeModel home2created = new HomeModel("home2", "broker.url");
-            home2 = userHomeResource.createHome(user1.getId(), home2created).getBody();
+            home2 = homeResource.createHome(home2created).getBody();
             Assert.assertNotNull(home2);
             Assert.assertEquals(home2, home2created);
+            userHomeResource.addExistingHome(user1.getId(), home2.getId());
 
             user = userResource.getUserById(user1.getId()).getBody();
             Assert.assertNotNull(user);
@@ -143,10 +147,14 @@ public class GeneralTest {
             Assert.assertNotNull(user);
             Assert.assertEquals(0, user.getCountOfSub());
         } finally {
-            homesRepository.deleteAll();
+            if (user1 != null && home1 != null) {
+                userHomeResource.removeAllHomesFromUser(user1.getId());
+                homesRepository.deleteById(home1.getId());
+            }
+            if (user2 != null && home2 != null) {
+                userHomeResource.removeAllHomesFromUser(user2.getId());
+                homesRepository.deleteById(home2.getId());
+            }
         }
     }
-
-
-
 }

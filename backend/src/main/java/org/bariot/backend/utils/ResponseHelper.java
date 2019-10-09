@@ -175,11 +175,33 @@ public class ResponseHelper<U extends IbasicInfo, T extends JpaRepository<U, Lon
     }
 
     /**
+     * Add child to parent list
+     *
+     * @param idParent
+     * @param idChild
+     * @param helperChild
+     * @param <ChildModel>
+     * @return ChildModel added to parent list
+     */
+    public <ChildModel extends IbasicInfo> ResponseEntity<ChildModel> addExistingChild(Long idParent, Long idChild, ResponseHelper<ChildModel, ?> helperChild) {
+        ChildModel child = helperChild.getById(idChild).getBody();
+        if (child != null) {
+            U parent = getById(idParent).getBody();
+            if (parent != null) {
+                parent.getAllSubs().add(child);
+                return ResponseEntity.ok(child);
+            }
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    /**
      * REMOVES child from parent
      */
     public <ChildRepo extends JpaRepository, ChildModel extends IbasicInfo> ResponseEntity<ChildModel>
     removeChildFromParent(Long idParent, Long idChild, ChildRepo childRepo) {
-
         try {
             Optional parentOpt = repository.findById(idParent);
             Optional childOpt = childRepo.findById(idChild);
@@ -192,6 +214,23 @@ public class ResponseHelper<U extends IbasicInfo, T extends JpaRepository<U, Lon
             }
             return ResponseEntity.notFound().build();
         } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    /**
+     * Removes all Children from parent list
+     *
+     * @param idParent
+     * @param helper
+     * @param <ChildModel>
+     */
+    public <ChildModel extends IbasicInfo> ResponseEntity<Void> removeAllChildrenFromParent(Long idParent, ResponseHelper<ChildModel, ?> helper) {
+        List<IbasicInfo> entities = helper.getParentsSub(idParent).getBody();
+        if (entities != null) {
+            entities.clear();
+            return ResponseEntity.ok().build();
+        } else {
             return ResponseEntity.notFound().build();
         }
     }
