@@ -92,7 +92,7 @@ public class RoomModel implements Serializable, IbasicInfo {
             return false;
         else {
             RoomModel room = (RoomModel) obj;
-            return (this.getId() == room.getId()
+            return (this.getId().equals(room.getId())
                     && this.getName().equals(room.getName())
                     && this.getCountOfSub() == room.getCountOfSub()
                     && this.getAllSubs() == room.getAllSubs()

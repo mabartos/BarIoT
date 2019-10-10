@@ -10,19 +10,15 @@ import org.bariot.backend.persistence.repo.UsersRepository;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -95,33 +91,57 @@ public class GeneralTest {
         }
     }
 
+    private UserModel createUserInDB(UserModel user) {
+        Assert.assertNotNull(user);
+        UserModel userModel = userResource.createUser(user).getBody();
+        Assert.assertNotNull(userModel);
+        Assert.assertEquals(userModel, user);
+        return userModel;
+    }
+
+    private HomeModel createHomeInDB(HomeModel home) {
+        Assert.assertNotNull(home);
+        HomeModel homeCreated = homeResource.createHome(home).getBody();
+        Assert.assertNotNull(homeCreated);
+        Assert.assertEquals(home, homeCreated);
+        return homeCreated;
+    }
+
+    private HomeModel createHomeInDB(String name, String brokerUrl) {
+        Assert.assertNotNull(name);
+        HomeModel create = new HomeModel(name, brokerUrl);
+        HomeModel homeCreated = homeResource.createHome(create).getBody();
+        Assert.assertNotNull(homeCreated);
+        Assert.assertEquals(create, homeCreated);
+        return homeCreated;
+    }
+
+    private void addHomeToUser(UserModel user, HomeModel home) {
+        Assert.assertNotNull(user);
+        Assert.assertNotNull(home);
+        userHomeResource.addExistingHome(user1.getId(), home.getId());
+        UserModel foundUser = userResource.getUserById(user.getId()).getBody();
+        Assert.assertNotNull(foundUser);
+    }
+
     @Test
     public void createHomes() {
         HomeModel home1 = null;
         HomeModel home2 = null;
         try {
-            UserModel user1model = userResource.createUser(user1).getBody();
-            UserModel user2model = userResource.createUser(user2).getBody();
-            Assert.assertNotNull(user1model);
-            Assert.assertNotNull(user2model);
-            Assert.assertEquals(user1model, user1);
-            Assert.assertEquals(user2model, user2);
+            user1 = createUserInDB(user1);
+            user2 = createUserInDB(user2);
 
-            HomeModel home1created = new HomeModel("home1");
-            home1 = homeResource.createHome(home1created).getBody();
-            Assert.assertNotNull(home1);
-            Assert.assertEquals(home1, home1created);
-            userHomeResource.addExistingHome(user1.getId(), home1.getId());
+            home1 = createHomeInDB("My_home", null);
+
+            addHomeToUser(user1, home1);
 
             UserModel user = userResource.getUserById(user1.getId()).getBody();
             Assert.assertNotNull(user);
             Assert.assertEquals(1, user.getCountOfSub());
 
-            HomeModel home2created = new HomeModel("home2", "broker.url");
-            home2 = homeResource.createHome(home2created).getBody();
-            Assert.assertNotNull(home2);
-            Assert.assertEquals(home2, home2created);
-            userHomeResource.addExistingHome(user1.getId(), home2.getId());
+            home2 = createHomeInDB("home2", "brokerURL");
+            addHomeToUser(user1, home2);
 
             user = userResource.getUserById(user1.getId()).getBody();
             Assert.assertNotNull(user);
@@ -148,15 +168,16 @@ public class GeneralTest {
             Assert.assertNotNull(user);
             Assert.assertEquals(0, user.getCountOfSub());
         } finally {
-            if (user1 != null && home1 != null) {
-                userHomeResource.removeAllHomesFromUser(user1.getId());
+
+            userHomeResource.removeAllHomesFromUser(user1.getId());
+            userHomeResource.removeAllHomesFromUser(user2.getId());
+
+            if (home1 != null)
                 homesRepository.deleteById(home1.getId());
-            }
-            if (user2 != null && home2 != null) {
-                userHomeResource.removeAllHomesFromUser(user2.getId());
+            if (home2 != null)
                 homesRepository.deleteById(home2.getId());
-            }
         }
+
     }
 
     @Test
@@ -165,17 +186,12 @@ public class GeneralTest {
         if (homeResource.getHomes().getBody() != null) {
             homeCnt = homeResource.getHomes().getBody().size();
         }
-        UserModel user1model = userResource.createUser(user1).getBody();
-        UserModel user2model = userResource.createUser(user2).getBody();
-        Assert.assertNotNull(user1model);
-        Assert.assertNotNull(user2model);
-        Assert.assertEquals(user1model, user1);
-        Assert.assertEquals(user2model, user2);
 
-        HomeModel home1created = new HomeModel("home1");
-        HomeModel home1 = homeResource.createHome(home1created).getBody();
-        Assert.assertNotNull(home1);
-        Assert.assertEquals(home1, home1created);
+        user1 = createUserInDB(user1);
+        user2 = createUserInDB(user2);
+
+        HomeModel home1 = createHomeInDB("home1", null);
+
         Assert.assertEquals(homeCnt + 1, homeResource.getHomes().getBody().size());
 
         homeResource.deleteHome(home1.getId());
@@ -183,22 +199,19 @@ public class GeneralTest {
             Assert.assertEquals(homeCnt, homeResource.getHomes().getBody().size());
         }
 
-        home1created = new HomeModel("home1", "10.10.10.2");
-        home1 = homeResource.createHome(home1created).getBody();
-        Assert.assertNotNull(home1);
-        Assert.assertEquals(home1, home1created);
+        HomeModel home2 = createHomeInDB("home2", "10.10.10.2");
         Assert.assertEquals(homeCnt + 1, homeResource.getHomes().getBody().size());
-        Assert.assertEquals("10.10.10.2", home1.getBrokerUrl());
+        Assert.assertEquals("10.10.10.2", home2.getBrokerUrl());
 
         HomeModel tmpHome = new HomeModel("TMP", "BROKER_TMP");
-        homeResource.updateUser(home1.getId(), tmpHome);
-        home1 = homeResource.findById(home1.getId()).getBody();
-        Assert.assertNotNull(home1);
-        Assert.assertEquals("BROKER_TMP", home1.getBrokerUrl());
-        Assert.assertEquals("TMP", home1.getName());
+        homeResource.updateUser(home2.getId(), tmpHome);
+        home2 = homeResource.findById(home2.getId()).getBody();
+        Assert.assertNotNull(home2);
+        Assert.assertEquals("BROKER_TMP", home2.getBrokerUrl());
+        Assert.assertEquals("TMP", home2.getName());
 
-        homeResource.deleteHome(home1.getId());
-        Assert.assertEquals(HttpStatus.NOT_FOUND, homeResource.findById(home1.getId()).getStatusCode());
+        homeResource.deleteHome(home2.getId());
+        Assert.assertEquals(HttpStatus.NOT_FOUND, homeResource.findById(home2.getId()).getStatusCode());
 
         if (homeResource.getHomes().getBody() != null) {
             int size = homeResource.getHomes().getBody().size();

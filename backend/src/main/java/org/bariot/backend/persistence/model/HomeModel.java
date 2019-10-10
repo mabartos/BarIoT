@@ -26,7 +26,7 @@ import java.util.Objects;
 public class HomeModel implements Serializable, IbasicInfo {
 
     @Id
-    @SequenceGenerator(name = "home_sequence", sequenceName = "home_seq", allocationSize = 100)
+    @SequenceGenerator(name = "home_sequence", sequenceName = "home_seq", allocationSize = 1)
     @GeneratedValue(generator = "home_sequence")
     @Column(name = "HOME_ID")
     private Long id;

@@ -24,7 +24,7 @@ import java.util.Objects;
 public class UserModel implements Serializable, IbasicInfo {
 
     @Id
-    @SequenceGenerator(name = "user_sequence", sequenceName = "user_seq", allocationSize = 100)
+    @SequenceGenerator(name = "user_sequence", sequenceName = "user_seq", allocationSize = 1)
     @GeneratedValue(generator = "user_sequence")
     @Column(name = "USER_ID", unique = true)
     private long id;
