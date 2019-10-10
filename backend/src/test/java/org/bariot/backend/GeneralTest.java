@@ -158,4 +158,51 @@ public class GeneralTest {
             }
         }
     }
+
+    @Test
+    public void deleteUpdateHomes() {
+        int homeCnt = 0;
+        if (homeResource.getHomes().getBody() != null) {
+            homeCnt = homeResource.getHomes().getBody().size();
+        }
+        UserModel user1model = userResource.createUser(user1).getBody();
+        UserModel user2model = userResource.createUser(user2).getBody();
+        Assert.assertNotNull(user1model);
+        Assert.assertNotNull(user2model);
+        Assert.assertEquals(user1model, user1);
+        Assert.assertEquals(user2model, user2);
+
+        HomeModel home1created = new HomeModel("home1");
+        HomeModel home1 = homeResource.createHome(home1created).getBody();
+        Assert.assertNotNull(home1);
+        Assert.assertEquals(home1, home1created);
+        Assert.assertEquals(homeCnt + 1, homeResource.getHomes().getBody().size());
+
+        homeResource.deleteHome(home1.getId());
+        if (homeResource.getHomes().getBody() != null) {
+            Assert.assertEquals(homeCnt, homeResource.getHomes().getBody().size());
+        }
+
+        home1created = new HomeModel("home1", "10.10.10.2");
+        home1 = homeResource.createHome(home1created).getBody();
+        Assert.assertNotNull(home1);
+        Assert.assertEquals(home1, home1created);
+        Assert.assertEquals(homeCnt + 1, homeResource.getHomes().getBody().size());
+        Assert.assertEquals("10.10.10.2", home1.getBrokerUrl());
+
+        HomeModel tmpHome = new HomeModel("TMP", "BROKER_TMP");
+        homeResource.updateUser(home1.getId(), tmpHome);
+        home1 = homeResource.findById(home1.getId()).getBody();
+        Assert.assertNotNull(home1);
+        Assert.assertEquals("BROKER_TMP", home1.getBrokerUrl());
+        Assert.assertEquals("TMP", home1.getName());
+
+        homeResource.deleteHome(home1.getId());
+        Assert.assertEquals(HttpStatus.NOT_FOUND, homeResource.findById(home1.getId()).getStatusCode());
+
+        if (homeResource.getHomes().getBody() != null) {
+            int size = homeResource.getHomes().getBody().size();
+            Assert.assertEquals(homeCnt, size);
+        }
+    }
 }

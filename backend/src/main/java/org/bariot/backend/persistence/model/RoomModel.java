@@ -105,6 +105,10 @@ public class RoomModel implements Serializable, IbasicInfo {
         return Objects.hash(id, name);
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public List<DeviceModel> getListDevices() {
         return listDevices;
     }

@@ -297,6 +297,17 @@ public class ResponseHelper<U extends IbasicInfo, T extends JpaRepository<U, Lon
         }
     }
 
+    public <ChildModel extends IbasicInfo> ResponseEntity<ChildModel> getSubByIdFromList(Long id, List<ChildModel> list) {
+        if (list != null) {
+            Optional opt = list.stream().filter(f -> f.getId().equals(id)).findFirst();
+            if (opt.isPresent()) {
+                return ResponseEntity.ok((ChildModel) opt.get());
+            }
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+
     public ResponseEntity<U> update(Long id, U model) {
         Optional entityOpt = repository.findById(id);
         if (entityOpt.isPresent()) {

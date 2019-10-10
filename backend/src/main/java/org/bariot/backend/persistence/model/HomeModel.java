@@ -71,6 +71,10 @@ public class HomeModel implements Serializable, IbasicInfo {
         this.id = id;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public String getName() {
         return this.name;

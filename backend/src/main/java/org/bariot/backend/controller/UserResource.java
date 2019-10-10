@@ -3,6 +3,7 @@ package org.bariot.backend.controller;
 import org.bariot.backend.persistence.model.UserModel;
 import org.bariot.backend.persistence.repo.UsersRepository;
 import org.bariot.backend.utils.ResponseHelper;
+import org.bariot.backend.utils.UpdateHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -71,18 +72,13 @@ public class UserResource {
     @PatchMapping(USER_ID)
     public ResponseEntity<UserModel> updateUserItems(@PathVariable("id") Long id, @RequestBody Map<String, String> updates) {
         Optional userOpt = usersRepository.findById(id);
-        if (userOpt.isPresent() && updates != null && !updates.isEmpty()) {
+        if (userOpt.isPresent()) {
             UserModel user = (UserModel) userOpt.get();
-            updates.forEach((key, val) -> {
-                        if (key.equals("firstName")) {
-                            user.setFirstName(val);
-                        } else if (key.equals("lastName")) {
-                            user.setLastName(val);
-                        }
-                    }
-            );
-            usersRepository.save(user);
-            return ResponseEntity.ok(user);
+            user = UpdateHelper.updateItems(user, updates);
+            if (user != null) {
+                usersRepository.save(user);
+                return ResponseEntity.ok(user);
+            }
         }
         return ResponseEntity.notFound().build();
     }

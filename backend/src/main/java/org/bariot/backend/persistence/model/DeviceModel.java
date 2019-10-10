@@ -71,4 +71,8 @@ public class DeviceModel implements Serializable, IbasicInfo {
     public RoomModel getRoom() {
         return room;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

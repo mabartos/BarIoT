@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 import static org.bariot.backend.controller.UserHomeResource.HOME_MAPPING;
 
@@ -86,14 +85,13 @@ public class RoomResource {
             idHome, @PathVariable("idRoom") Long idRoom) {
         HomeModel home = homeResource.getHomeByID(id, idHome).getBody();
         if (home != null) {
-            List<RoomModel> list = home.getRoomsList();
-            Optional optRoom = list.stream().filter(f -> f.getId() == idRoom).findFirst();
-            if (optRoom.isPresent()) {
-                list.remove(optRoom.get());
-                return ResponseEntity.ok((RoomModel) optRoom.get());
+            RoomModel room = helperRoom.getSubByIdFromList(idRoom, home.getRoomsList()).getBody();
+            if (room != null) {
+                if (home.getRoomsList().remove(room)) {
+                    return ResponseEntity.ok(room);
+                }
             }
-            return ResponseEntity.notFound().build();
-        } else
+        }
             return ResponseEntity.notFound().build();
     }
 
@@ -105,15 +103,11 @@ public class RoomResource {
     ) {
         HomeModel home = homeResource.getHomeByID(id, idHome).getBody();
         if (home != null) {
-            Optional optRoom = home.getRoomsList().stream().filter(f -> f.getId() == idRoom).findFirst();
-            if (optRoom.isPresent()) {
-                return ResponseEntity.ok((RoomModel) optRoom.get());
+            RoomModel room = helperRoom.getSubByIdFromList(idRoom, home.getRoomsList()).getBody();
+            if (room != null) {
+                return ResponseEntity.ok(room);
             }
-            return ResponseEntity.notFound().build();
-        } else
-            return ResponseEntity.notFound().build();
-
+        }
+        return ResponseEntity.notFound().build();
     }
-
-
 }
