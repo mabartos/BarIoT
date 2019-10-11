@@ -9,6 +9,7 @@ import org.bariot.backend.persistence.repo.RoomsRepository;
 import org.bariot.backend.persistence.repo.UsersRepository;
 import org.bariot.backend.utils.ResponseHelper;
 import org.bariot.backend.utils.UpdateHelper;
+import org.bariot.backend.utils.UserPathHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -51,14 +52,19 @@ public class RoomResource {
     @Autowired
     private UserHomeResource userHomeResource;
 
+    @Autowired
+    private UserResource userResource;
+
 
     private UserHomeResource homeResource;
     private ResponseHelper<RoomModel, RoomsRepository> helperRoom;
+    private UserPathHelper pathHelper;
 
     @PostConstruct
     public void init() {
         helperRoom = new ResponseHelper<>(roomRepo);
         homeResource = new UserHomeResource(userRepo, homeRepo);
+        pathHelper = new UserPathHelper(userResource);
     }
 
     public RoomResource(UsersRepository userRepo, HomesRepository homesRepo, RoomsRepository roomsRepo) {

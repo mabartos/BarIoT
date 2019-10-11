@@ -3,6 +3,7 @@ package org.bariot.backend.controller;
 import org.bariot.backend.persistence.model.UserModel;
 import org.bariot.backend.persistence.repo.UsersRepository;
 import org.bariot.backend.utils.ResponseHelper;
+import org.bariot.backend.utils.ResponseHelperMulti;
 import org.bariot.backend.utils.UpdateHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,9 +36,12 @@ public class UserResource {
 
     private ResponseHelper<UserModel, UsersRepository> helper;
 
+    private ResponseHelperMulti<UserModel> mainHelper;
+
     @PostConstruct
     public void init() {
         helper = new ResponseHelper<>(usersRepository);
+        mainHelper = new ResponseHelperMulti<>();
     }
 
     @GetMapping()

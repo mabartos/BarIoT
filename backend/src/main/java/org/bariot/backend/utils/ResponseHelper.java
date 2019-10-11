@@ -221,8 +221,8 @@ public class ResponseHelper<U extends IbasicInfo, T extends JpaRepository<U, Lon
     /**
      * Removes all Children from parent list
      *
-     * @param idParent
      * @param helper
+     * @param idParent
      * @param <ChildModel>
      */
     public <ChildModel extends IbasicInfo> ResponseEntity<Void> removeAllChildrenFromParent(Long idParent, ResponseHelper<ChildModel, ?> helper) {

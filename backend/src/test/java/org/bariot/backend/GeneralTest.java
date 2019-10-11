@@ -54,7 +54,7 @@ public class GeneralTest {
         if (user2 != null)
             usersRepository.deleteById(user2.getId());
     }
-
+    
     @Test
     public void basicOperations() {
         int size = usersRepository.findAll().size();
@@ -173,6 +173,7 @@ public class GeneralTest {
             userHomeResource.removeAllHomesFromUser(user2.getId());
 
             if (home1 != null)
+
                 homesRepository.deleteById(home1.getId());
             if (home2 != null)
                 homesRepository.deleteById(home2.getId());
