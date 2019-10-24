@@ -1,11 +1,13 @@
 package org.bariot.backend.utils;
 
+import org.bariot.backend.persistence.model.UserModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -265,6 +267,7 @@ public class ResponseHelper<U extends IbasicInfo, T extends JpaRepository<U, Lon
     public ResponseEntity<U> deleteById(Long id) {
         Optional entityOpt = repository.findById(id);
         if (entityOpt.isPresent()) {
+            U entity = (U) entityOpt.get();
             repository.deleteById(id);
             return ResponseEntity.ok((U) entityOpt.get());
         } else {
@@ -314,6 +317,19 @@ public class ResponseHelper<U extends IbasicInfo, T extends JpaRepository<U, Lon
             model.setId(id);
             repository.save(model);
             return ResponseEntity.ok(model);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    public ResponseEntity<U> update(Long id, Map<String, String> updates) {
+        Optional userOpt = repository.findById(id);
+        if (userOpt.isPresent()) {
+            U entity = (U) userOpt.get();
+            entity = UpdateHelper.updateItems(entity, updates);
+            if (entity != null) {
+                repository.save(entity);
+                return ResponseEntity.ok(entity);
+            }
         }
         return ResponseEntity.notFound().build();
     }

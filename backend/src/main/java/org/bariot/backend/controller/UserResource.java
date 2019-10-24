@@ -3,8 +3,6 @@ package org.bariot.backend.controller;
 import org.bariot.backend.persistence.model.UserModel;
 import org.bariot.backend.persistence.repo.UsersRepository;
 import org.bariot.backend.utils.ResponseHelper;
-import org.bariot.backend.utils.ResponseHelperMulti;
-import org.bariot.backend.utils.UpdateHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,7 +19,6 @@ import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -36,12 +33,10 @@ public class UserResource {
 
     private ResponseHelper<UserModel, UsersRepository> helper;
 
-    private ResponseHelperMulti<UserModel> mainHelper;
 
     @PostConstruct
     public void init() {
         helper = new ResponseHelper<>(usersRepository);
-        mainHelper = new ResponseHelperMulti<>();
     }
 
     @GetMapping()
@@ -75,16 +70,7 @@ public class UserResource {
 
     @PatchMapping(USER_ID)
     public ResponseEntity<UserModel> updateUserItems(@PathVariable("id") Long id, @RequestBody Map<String, String> updates) {
-        Optional userOpt = usersRepository.findById(id);
-        if (userOpt.isPresent()) {
-            UserModel user = (UserModel) userOpt.get();
-            user = UpdateHelper.updateItems(user, updates);
-            if (user != null) {
-                usersRepository.save(user);
-                return ResponseEntity.ok(user);
-            }
-        }
-        return ResponseEntity.notFound().build();
+        return helper.update(id, updates);
     }
 
     @DeleteMapping(USER_ID)

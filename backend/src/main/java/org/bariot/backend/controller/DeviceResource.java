@@ -2,12 +2,8 @@ package org.bariot.backend.controller;
 
 import org.bariot.backend.persistence.model.DeviceModel;
 import org.bariot.backend.persistence.model.RoomModel;
-import org.bariot.backend.persistence.repo.DevicesRepository;
-import org.bariot.backend.persistence.repo.HomesRepository;
-import org.bariot.backend.persistence.repo.RoomsRepository;
 import org.bariot.backend.persistence.repo.UsersRepository;
-import org.bariot.backend.utils.ResponseHelper;
-import org.bariot.backend.utils.UpdateHelper;
+import org.bariot.backend.utils.ResponseHelperMulti;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,7 +20,6 @@ import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static org.bariot.backend.controller.RoomResource.ROOM_MAPPING;
 import static org.bariot.backend.controller.UserHomeResource.HOME_MAPPING;
@@ -41,22 +36,12 @@ public class DeviceResource {
 
     @Autowired
     private UsersRepository userRepo;
-    @Autowired
-    private HomesRepository homeRepo;
-    @Autowired
-    private RoomsRepository roomRepo;
 
-    @Autowired
-    private DevicesRepository devRepo;
-
-    private RoomResource roomResource;
-
-    private ResponseHelper<DeviceModel, DevicesRepository> helperDevice;
+    private ResponseHelperMulti<RoomModel, DeviceModel> helper;
 
     @PostConstruct
     public void init() {
-        helperDevice = new ResponseHelper<>(devRepo);
-        roomResource = new RoomResource(userRepo, homeRepo, roomRepo);
+        helper = new ResponseHelperMulti<>(userRepo);
     }
     
     // Basic operations
@@ -67,11 +52,8 @@ public class DeviceResource {
             @PathVariable("idHome") Long idHome,
             @PathVariable("idRoom") Long idRoom
     ) {
-        RoomModel room = roomResource.getRoomByID(id, idHome, idRoom).getBody();
-        if (room != null) {
-            List<DeviceModel> devList = room.getListDevices();
-            if (devList != null)
-                return ResponseEntity.ok(devList);
+        if (helper.isInited(id, idHome, idRoom)) {
+            return helper.getAll();
         }
         return ResponseEntity.notFound().build();
     }
@@ -83,12 +65,8 @@ public class DeviceResource {
             @PathVariable("idRoom") Long idRoom,
             @PathVariable("idDev") Long idDev
     ) {
-        RoomModel room = roomResource.getRoomByID(id, idHome, idRoom).getBody();
-        if (room != null) {
-            DeviceModel device = helperDevice.getSubByIdFromList(idDev, room.getListDevices()).getBody();
-            if (device != null) {
-                return ResponseEntity.ok(device);
-            }
+        if (helper.isInited(id, idHome, idRoom)) {
+            return helper.getItem(idDev);
         }
         return ResponseEntity.notFound().build();
     }
@@ -100,30 +78,8 @@ public class DeviceResource {
             @PathVariable("idRoom") Long idRoom,
             @RequestBody DeviceModel device
     ) {
-        RoomModel room = roomResource.getRoomByID(id, idHome, idRoom).getBody();
-        if (room != null) {
-            List<DeviceModel> deviceList = room.getListDevices();
-            if (deviceList != null) {
-                deviceList.add(device);
-                return ResponseEntity.ok(device);
-            }
-        }
-        return ResponseEntity.notFound().build();
-    }
-
-    @PostMapping(DEV_BASIC_URL + DEV_ID)
-    public ResponseEntity<DeviceModel> addExistingDevice(
-            @PathVariable("id") Long id,
-            @PathVariable("idHome") Long idHome,
-            @PathVariable("idRoom") Long idRoom,
-            @PathVariable("idDev") Long idDev
-    ) {
-        RoomModel room = roomResource.getRoomByID(id, idHome, idRoom).getBody();
-        Optional opt = devRepo.findById(idDev);
-        if (room != null && opt.isPresent()) {
-            DeviceModel device = (DeviceModel) opt.get();
-            room.getListDevices().add(device);
-            return ResponseEntity.ok(device);
+        if (helper.isInited(id, idHome, idRoom)) {
+            return helper.createItem(device);
         }
         return ResponseEntity.notFound().build();
     }
@@ -136,13 +92,8 @@ public class DeviceResource {
             @PathVariable("idDev") Long idDev,
             @RequestBody DeviceModel device
     ) {
-        RoomModel room = roomResource.getRoomByID(id, idHome, idRoom).getBody();
-        if (room != null && device != null) {
-            DeviceModel model = helperDevice.getSubByIdFromList(idDev, room.getListDevices()).getBody();
-            if (model != null) {
-                helperDevice.update(idDev, model);
-                return ResponseEntity.ok(device);
-            }
+        if (helper.isInited(id, idHome, idRoom)) {
+            return helper.updateItem(idDev, device);
         }
         return ResponseEntity.notFound().build();
     }
@@ -155,35 +106,22 @@ public class DeviceResource {
             @PathVariable("idDev") Long idDev,
             @RequestBody Map<String, String> updates
     ) {
-        RoomModel room = roomResource.getRoomByID(id, idHome, idRoom).getBody();
-        if (room != null) {
-            DeviceModel device = helperDevice.getSubByIdFromList(idDev, room.getListDevices()).getBody();
-            device = UpdateHelper.updateItems(device, updates);
-            if (device != null) {
-                devRepo.save(device);
-                return ResponseEntity.ok(device);
-            }
+        if (helper.isInited(id, idHome, idRoom)) {
+            return helper.updateItemProps(idDev, updates);
         }
         return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping(DEV_BASIC_URL + DEV_ID)
-    public ResponseEntity<DeviceModel> removeDeviceFromRoom(
+    public ResponseEntity<DeviceModel> deleteDevice(
             @PathVariable("id") Long id,
             @PathVariable("idHome") Long idHome,
             @PathVariable("idRoom") Long idRoom,
             @PathVariable("idDev") Long idDev
     ) {
-        RoomModel room = roomResource.getRoomByID(id, idHome, idRoom).getBody();
-        if (room != null) {
-            DeviceModel device = helperDevice.getSubByIdFromList(idRoom, room.getListDevices()).getBody();
-            if (device != null) {
-                if (room.getListDevices().remove(device)) {
-                    return ResponseEntity.ok(device);
-                }
-            }
+        if (helper.isInited(id, idHome, idRoom)) {
+            return helper.deleteItemById(idDev);
         }
         return ResponseEntity.notFound().build();
     }
-
 }

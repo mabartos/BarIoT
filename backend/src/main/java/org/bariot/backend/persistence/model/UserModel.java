@@ -3,6 +3,8 @@ package org.bariot.backend.persistence.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.bariot.backend.utils.IbasicInfo;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +17,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -39,13 +42,14 @@ public class UserModel implements Serializable, IbasicInfo {
     private String lastName;
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @Cascade(CascadeType.REMOVE)
     @JoinTable(name = "USERS_HOMES",
             joinColumns = {
                     @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")},
             inverseJoinColumns = {
                     @JoinColumn(name = "HOME_ID", referencedColumnName = "HOME_ID")}
     )
-    private List<HomeModel> homesList;
+    private List<HomeModel> homesList=new ArrayList<>();
 
     public UserModel() {
     }

@@ -5,8 +5,7 @@ import org.bariot.backend.persistence.model.HomeModel;
 import org.bariot.backend.persistence.model.UserModel;
 import org.bariot.backend.persistence.repo.HomesRepository;
 import org.bariot.backend.persistence.repo.UsersRepository;
-import org.bariot.backend.utils.ResponseHelper;
-import org.bariot.backend.utils.UpdateHelper;
+import org.bariot.backend.utils.ResponseHelperMulti;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,7 +22,6 @@ import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static org.bariot.backend.controller.UserResource.USER_MAPPING;
 
@@ -43,83 +41,83 @@ public class UserHomeResource {
     @Autowired
     private UsersRepository userRepo;
 
-    private ResponseHelper<HomeModel, HomesRepository> helperHome;
-    private ResponseHelper<UserModel, UsersRepository> helperUser;
+    private ResponseHelperMulti<UserModel, HomeModel> helper;
 
     @PostConstruct
     public void init() {
-        helperHome = new ResponseHelper<>(homesRepo);
-        helperUser = new ResponseHelper<>(userRepo);
-    }
-
-    public UserHomeResource(UsersRepository userRepo, HomesRepository homesRepo) {
-        helperUser = new ResponseHelper<>(userRepo);
-        this.userRepo = userRepo;
-        this.homesRepo = homesRepo;
+        helper = new ResponseHelperMulti<>(userRepo, homesRepo);
     }
 
     // Basic operations
 
     @GetMapping(HOME_BASIC_URL)
     public ResponseEntity<List<HomeModel>> getUsersHomes(@PathVariable("id") Long id) {
-        return helperUser.getParentsSub(id);
+        if (helper.isInited(id)) {
+            return helper.getAll();
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping(HOME_BASIC_URL)
     public ResponseEntity<HomeModel> createHome(@PathVariable("id") Long id, @RequestBody HomeModel home) {
-        HomeModel created = helperHome.create(home).getBody();
-        if (created != null)
-            return helperUser.addSubEntity(id, created.getId(), homesRepo);
-        else
-            return ResponseEntity.notFound().build();
+        if (helper.isInited(id)) {
+            return helper.createItem(home);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping(HOME_BASIC_URL + HOME_ID)
     public ResponseEntity<HomeModel> addExistingHome(@PathVariable("id") Long id, @PathVariable("idHome") Long idHome) {
-        return helperUser.addExistingChild(id, idHome, helperHome);
+        if (helper.isInited(id)) {
+            return helper.addExistingHomeToUser(idHome);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping(HOME_BASIC_URL + HOME_ID)
     public ResponseEntity<HomeModel> removeHomeFromUser(@PathVariable("id") Long id, @PathVariable("idHome") Long idHome) {
-        return helperUser.removeChildFromParent(id, idHome, homesRepo);
+        if (helper.isInited(id)) {
+            return helper.deleteItemById(idHome);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping(HOME_BASIC_URL)
     public ResponseEntity<Void> removeAllHomesFromUser(@PathVariable("id") Long id) {
-        return helperUser.removeAllChildrenFromParent(id, helperHome);
+        if (helper.isInited(id)) {
+            return helper.removeAllSub();
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @GetMapping(HOME_BASIC_URL + HOME_ID)
     public ResponseEntity<HomeModel> getHomeByID(@PathVariable("id") Long id, @PathVariable("idHome") Long idHome) {
-        return helperUser.getSubByID(id, idHome, homesRepo);
+        if (helper.isInited(id)) {
+            return helper.getItem(idHome);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PutMapping(HOME_BASIC_URL + HOME_ID)
-    public ResponseEntity<HomeModel> updateHome(@PathVariable("id") Long id, @PathVariable("idHome") Long idHome, @RequestBody HomeModel home) {
-        Optional userOpt = userRepo.findById(id);
-        if (userOpt.isPresent() && home != null) {
-            HomeModel model = (HomeModel) helperUser.getSubByID(id, idHome, homesRepo).getBody();
-            if (model != null) {
-                home.setId(model.getId());
-                homesRepo.save(home);
-                return ResponseEntity.ok(home);
-            }
+    public ResponseEntity<HomeModel> updateHome(
+            @PathVariable("id") Long id,
+            @PathVariable("idHome") Long idHome,
+            @RequestBody HomeModel home
+    ) {
+        if (helper.isInited(id)) {
+            return helper.updateItem(idHome, home);
         }
         return ResponseEntity.notFound().build();
     }
 
     @PatchMapping(HOME_BASIC_URL + HOME_ID)
-    public ResponseEntity<HomeModel> updateHomeItems(@PathVariable("id") Long id, @PathVariable("idHome") Long
-            idHome, @RequestBody Map<String, String> updates) {
-        Optional userOpt = userRepo.findById(id);
-        if (userOpt.isPresent()) {
-            UserModel user = (UserModel) userOpt.get();
-            HomeModel home = helperHome.getSubByIdFromList(idHome, user.getAllSubs()).getBody();
-            home = UpdateHelper.updateItems(home, updates);
-            if (home != null) {
-                homesRepo.save(home);
-                return ResponseEntity.ok(home);
-            }
+    public ResponseEntity<HomeModel> updateHomeItems(
+            @PathVariable("id") Long id,
+            @PathVariable("idHome") Long idHome,
+            @RequestBody Map<String, String> updates
+    ) {
+        if (helper.isInited(id)) {
+            return helper.updateItemProps(idHome, updates);
         }
         return ResponseEntity.notFound().build();
     }

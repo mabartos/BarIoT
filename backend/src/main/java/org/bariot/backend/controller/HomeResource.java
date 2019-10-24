@@ -3,7 +3,6 @@ package org.bariot.backend.controller;
 import org.bariot.backend.persistence.model.HomeModel;
 import org.bariot.backend.persistence.repo.HomesRepository;
 import org.bariot.backend.utils.ResponseHelper;
-import org.bariot.backend.utils.UpdateHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,7 +19,6 @@ import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Transactional
 @RestController
@@ -40,11 +38,7 @@ public class HomeResource {
 
     @PostMapping()
     public ResponseEntity<HomeModel> createHome(@RequestBody HomeModel home) {
-        HomeModel created = helper.create(home).getBody();
-        if (created != null)
-            return ResponseEntity.ok(created);
-        else
-            return ResponseEntity.notFound().build();
+        return helper.create(home);
     }
 
     @PutMapping(HOME_ID)
@@ -54,25 +48,12 @@ public class HomeResource {
 
     @PatchMapping(HOME_ID)
     public ResponseEntity<HomeModel> updateHomeItems(@PathVariable("idHome") Long id, @RequestBody Map<String, String> updates) {
-        Optional opt = homesRepo.findById(id);
-        if (opt.isPresent()) {
-            HomeModel home = (HomeModel) opt.get();
-            home = UpdateHelper.updateItems(home, updates);
-            if (home != null) {
-                homesRepo.save(home);
-                return ResponseEntity.ok(home);
-            }
-        }
-        return ResponseEntity.notFound().build();
+        return helper.update(id, updates);
     }
 
     @GetMapping(HOME_ID)
     public ResponseEntity<HomeModel> findById(@PathVariable("idHome") Long id) {
-        List<HomeModel> list = getHomes().getBody();
-        if (list != null) {
-            return helper.getSubByIdFromList(id, list);
-        }
-        return ResponseEntity.notFound().build();
+        return helper.getById(id);
     }
 
     @GetMapping()

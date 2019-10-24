@@ -15,21 +15,22 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Transactional
+@Rollback
 public class GeneralTest {
 
     @Autowired
     private UsersRepository usersRepository;
-
-    @Autowired
-    private HomesRepository homesRepository;
-
+    
     @Autowired
     private UserResource userResource;
 
@@ -173,10 +174,9 @@ public class GeneralTest {
             userHomeResource.removeAllHomesFromUser(user2.getId());
 
             if (home1 != null)
-
-                homesRepository.deleteById(home1.getId());
+                homeResource.deleteHome(home1.getId());
             if (home2 != null)
-                homesRepository.deleteById(home2.getId());
+                homeResource.deleteHome(home2.getId());
         }
 
     }

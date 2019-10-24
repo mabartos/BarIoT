@@ -7,22 +7,22 @@ import org.bariot.backend.persistence.model.UserModel;
 import org.bariot.backend.persistence.repo.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @SuppressWarnings("unchecked")
-@Component
 public class UserPathHelper {
 
     private UserModel user = null;
     private HomeModel home = null;
     private RoomModel room = null;
     private DeviceModel device = null;
-
-    @Autowired
+    
     private UsersRepository userRepo;
 
-    public UserPathHelper() {
+    public UserPathHelper(UsersRepository userRepo) {
+        this.userRepo = userRepo;
     }
 
     private <Parent extends IbasicInfo, Child extends IbasicInfo> Child getFromList(Parent parent, long id) {
@@ -44,6 +44,9 @@ public class UserPathHelper {
     }
 
     public <Model extends IbasicInfo> Model getPath(Long... ids) {
+        if (userRepo == null)
+            return null;
+
         UserModel user = null;
         HomeModel home = null;
         RoomModel room = null;
