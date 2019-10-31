@@ -51,6 +51,7 @@ const useStyles = makeStyles(theme => ({
     ...theme.mixins.toolbar,
   },
   appBar: {
+
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
@@ -113,6 +114,20 @@ const useStyles = makeStyles(theme => ({
   fixedHeight: {
     height: 240,
   },
+  blueGradientContent: {
+    background: 'rgb(5, 2, 52)',
+    background: 'linear-gradient(27deg, rgba(5, 2, 52, 1) 0%, rgba(9, 9, 121, 1) 28%, rgba(0, 212, 255, 1) 100%)',
+    width: '100%'
+  },
+  blueGradientBar: {
+    color:'white',
+    background: 'transparent',
+    boxShadow:'none'
+  },
+  blueGradientSideBar:{
+    color:'white',
+    background: 'linear-gradient( 108.9deg,  rgba(21,65,168,1) 4.9%, rgba(120,232,173,1) 97% )'
+  }
 }));
 
 export default function Dashboard() {
@@ -129,7 +144,7 @@ export default function Dashboard() {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
+      <AppBar position="absolute" className={clsx(classes.appBar, classes.blueGradientBar,open && classes.appBarShift)}>
         <Toolbar className={classes.toolbar}>
           <IconButton
             edge="start"
@@ -140,7 +155,7 @@ export default function Dashboard() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+          <Typography component="h1" variant="h4" color="inherit" noWrap className={classes.title}>
             Homes
           </Typography>
           <IconButton color="inherit">
@@ -153,7 +168,7 @@ export default function Dashboard() {
       <Drawer
         variant="permanent"
         classes={{
-          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+          paper: clsx(classes.drawerPaper,classes.blueGradientSideBar,!open && classes.drawerPaperClose),
         }}
         open={open}
       >
@@ -167,19 +182,21 @@ export default function Dashboard() {
         <Divider />
         <List>{secondaryListItems}</List>
       </Drawer>
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
-            <HomeTile name="Home 1" />
-            <HomeTile name="Home 2" />
-            <HomeTile name="Home 3" />
-            <HomeTile name="Home 4" />
-            <HomeTile name="Home 5" />
-          </Grid>
-        </Container>
-        <Copyright />
-      </main>
+      <div className={classes.blueGradientContent}>
+        <main className={classes.content}>
+          <div className={classes.appBarSpacer} />
+          <Container maxWidth="lg" className={classes.container}>
+            <Grid container spacing={3}>
+              <HomeTile name="Home 1" />
+              <HomeTile name="Home 2" />
+              <HomeTile name="Home 3" />
+              <HomeTile name="Home 4" />
+              <HomeTile name="Home 5" />
+            </Grid>
+          </Container>
+          <Copyright />
+        </main>
+      </div>
     </div>
   );
 }

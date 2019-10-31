@@ -8,7 +8,7 @@ import Image from '../../assets/smartHome.jpg';
 
 class Tile extends React.Component {
     myStyle = {
-        flex: 1
+        flex: 1,
     }
 
     render() {
