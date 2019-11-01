@@ -11,17 +11,19 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from './listItems';
-import Chart from './Chart';
-import Tile from './Tile';
+import Grid from '@material-ui/core/Grid';
 import HomeTile from '../HomeTile';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import DashboardIcon from '@material-ui/icons/Dashboard';
 
-function Copyright() {
+export function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
@@ -36,7 +38,7 @@ function Copyright() {
 
 const drawerWidth = 240;
 
-const useStyles = makeStyles(theme => ({
+export const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
   },
@@ -120,17 +122,17 @@ const useStyles = makeStyles(theme => ({
     width: '100%'
   },
   blueGradientBar: {
-    color:'white',
+    color: 'white',
     background: 'transparent',
-    boxShadow:'none'
+    boxShadow: 'none'
   },
-  blueGradientSideBar:{
-    color:'white',
+  blueGradientSideBar: {
+    color: 'white',
     background: 'linear-gradient( 108.9deg,  rgba(21,65,168,1) 4.9%, rgba(120,232,173,1) 97% )'
   }
 }));
 
-export default function Dashboard() {
+export default function Dashboard({ homes }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const handleDrawerOpen = () => {
@@ -144,7 +146,7 @@ export default function Dashboard() {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar position="absolute" className={clsx(classes.appBar, classes.blueGradientBar,open && classes.appBarShift)}>
+      <AppBar position="absolute" className={clsx(classes.appBar, classes.blueGradientBar, open && classes.appBarShift)}>
         <Toolbar className={classes.toolbar}>
           <IconButton
             edge="start"
@@ -168,7 +170,7 @@ export default function Dashboard() {
       <Drawer
         variant="permanent"
         classes={{
-          paper: clsx(classes.drawerPaper,classes.blueGradientSideBar,!open && classes.drawerPaperClose),
+          paper: clsx(classes.drawerPaper, classes.blueGradientSideBar, !open && classes.drawerPaperClose),
         }}
         open={open}
       >
@@ -178,6 +180,15 @@ export default function Dashboard() {
           </IconButton>
         </div>
         <Divider />
+        {homes.map((item) => (
+          <ListItem button>
+            <ListItemIcon>
+              <DashboardIcon />
+            </ListItemIcon>
+            <ListItemText primary={item.name} />
+          </ListItem>
+        ))
+        }
         <List>{mainListItems}</List>
         <Divider />
         <List>{secondaryListItems}</List>
@@ -187,16 +198,15 @@ export default function Dashboard() {
           <div className={classes.appBarSpacer} />
           <Container maxWidth="lg" className={classes.container}>
             <Grid container spacing={3}>
-              <HomeTile name="Home 1" />
-              <HomeTile name="Home 2" />
-              <HomeTile name="Home 3" />
-              <HomeTile name="Home 4" />
-              <HomeTile name="Home 5" />
+              {homes.map((home) => (
+                <HomeTile name={home.name} />
+              ))}
             </Grid>
           </Container>
           <Copyright />
         </main>
       </div>
+
     </div>
   );
 }

@@ -10,14 +10,18 @@ import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 
-export const mainListItems = (
+export const mainListItems = (content)=>(
   <div>
-    <ListItem button>
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText primary="Dashboard" />
-    </ListItem>
+    {content.map((item) => (
+                   <ListItem button>
+                   <ListItemIcon>
+                     <DashboardIcon />
+                   </ListItemIcon>
+                   <ListItemText primary={item.name} />
+                 </ListItem>
+                ))
+                }
+    
     <ListItem button>
       <ListItemIcon>
         <ShoppingCartIcon />
