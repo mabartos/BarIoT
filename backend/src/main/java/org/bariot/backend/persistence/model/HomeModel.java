@@ -40,8 +40,7 @@ public class HomeModel implements Serializable, IbasicInfo {
     @Column(name = "BROKER")
     private String brokerUrl;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @Cascade(CascadeType.REMOVE)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "HOMES_USERS",
             joinColumns = {
                     @JoinColumn(name = "HOME_ID", referencedColumnName = "HOME_ID")},

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Map;
@@ -74,9 +75,16 @@ public class UserResource {
     }
 
     @DeleteMapping(USER_ID)
-    public ResponseEntity<UserModel> deleteUser(@PathVariable("id") Long idOrName) {
-        return helper.deleteById(idOrName);
+    public ResponseEntity<UserModel> deleteUser(@PathVariable("id") Long id) {
+        try {
+            if (usersRepository.getOne(id) != null) {
+                usersRepository.deleteHomeById(id);
+                return ResponseEntity.ok().build();
+            } else
+                return ResponseEntity.notFound().build();
+
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
-
-
 }

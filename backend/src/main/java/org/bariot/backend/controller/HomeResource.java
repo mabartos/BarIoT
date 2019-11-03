@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +64,15 @@ public class HomeResource {
 
     @DeleteMapping("/{id:[\\d]+}")
     public ResponseEntity<HomeModel> deleteHome(@PathVariable("id") Long id) {
-        return helper.deleteById(id);
+        try {
+            if (homesRepo.getOne(id) != null) {
+                homesRepo.deleteHomeById(id);
+                return ResponseEntity.ok().build();
+            } else
+                return ResponseEntity.notFound().build();
+
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

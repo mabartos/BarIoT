@@ -41,8 +41,7 @@ public class UserModel implements Serializable, IbasicInfo {
     @Column(name = "LAST_NAME")
     private String lastName;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @Cascade(CascadeType.REMOVE)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "USERS_HOMES",
             joinColumns = {
                     @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")},
