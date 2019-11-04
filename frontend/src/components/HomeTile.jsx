@@ -14,7 +14,7 @@ class HomeTile extends React.Component {
             height: 240,
             color:'white',
             background:'#1A2980',
-            opacity:'0.7'
+            opacity:'0.8'
         }
     }
 

@@ -17,11 +17,11 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from './listItems';
 import Grid from '@material-ui/core/Grid';
-import HomeTile from '../HomeTile';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import GeneralTile from '../GeneralTile';
 
 export function Copyright() {
   return (
@@ -198,9 +198,10 @@ export default function Dashboard({ homes }) {
           <div className={classes.appBarSpacer} />
           <Container maxWidth="lg" className={classes.container}>
             <Grid container spacing={3}>
-              {homes.map((home) => (
-                <HomeTile name={home.name} />
-              ))}
+              {homes.map((home) =>
+                <GeneralTile name={home.name} imageUrl="/assets/52921.jpg"/>
+              )}
+
             </Grid>
           </Container>
           <Copyright />

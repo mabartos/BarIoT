@@ -3,7 +3,7 @@ import Dashboard from '../components/mainDashboard/Dashboard';
 
 
 class DashboardMainPage extends React.Component {
-    constructor({ props }) {
+    constructor(props) {
         super(props);
         this.state = {
             homes: [],

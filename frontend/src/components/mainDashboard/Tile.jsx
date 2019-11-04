@@ -1,10 +1,8 @@
 /* eslint-disable no-script-url */
 import React from 'react';
 import Link from '@material-ui/core/Link';
-import Typography from '@material-ui/core/Typography';
 import Title from './Title';
 
-import Image from '../../assets/smartHome.jpg';
 
 class Tile extends React.Component {
     myStyle = {
