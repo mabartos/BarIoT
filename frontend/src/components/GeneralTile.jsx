@@ -51,7 +51,7 @@ export default function GeneralTile(props) {
     }
 
     return (
-        <Grid item xs={12} md={4} lg={3}>
+        <Grid item xs={12} md={4} spacing={2}>
             <Card button className={classes.card} >
                 <CardHeader
                     classes={{ title: classes.cardTitle }}
