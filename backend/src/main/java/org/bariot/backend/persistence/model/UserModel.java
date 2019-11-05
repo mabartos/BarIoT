@@ -123,6 +123,9 @@ public class UserModel implements Serializable, IbasicInfo {
         this.lastName = lastName;
     }
 
+    public void setUserName(String name){
+        this.userName=name;
+    }
     @Override
     public void setId(Long id) {
         this.id = id;

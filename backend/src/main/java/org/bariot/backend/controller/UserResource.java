@@ -61,6 +61,7 @@ public class UserResource {
 
     @PostMapping()
     public ResponseEntity<UserModel> createUser(@RequestBody UserModel user) {
+        System.out.println("User::: "+user.getUsername());
         return helper.create(user);
     }
 

@@ -8,17 +8,21 @@ First, you have to execute this command from this directory.
 
 ```
 cd backend/
-./mvnw springboot:run
+mvn springboot:run
 ```
 
 Backend should run on port 8080, in case the port is used, the port is contained in server log.
 So, now the server listen on ``localhost:8080``.
+
+Database is PostgreSQL. You have to add props ``application.properties`` to /src/main/resources. 
+The file is confidential.
 
 
 ## Frontend
 
 ```
 cd frontend/
+npm install
 npm start
 ```
 

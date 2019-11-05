@@ -1,4 +1,4 @@
-HELP.md
+.gitignore
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
@@ -30,8 +30,8 @@ build/
 ### VS Code ###
 .vscode/
 
-HELP.md
 mvnw
 mvnw.cmd
 .mvn
-/src/main/resources/application.properties
+
+src/main/resources/application.properties
