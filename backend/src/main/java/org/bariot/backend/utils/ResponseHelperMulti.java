@@ -15,7 +15,7 @@ import java.util.Optional;
  * @param <ChildModel> This model
  */
 @SuppressWarnings("unchecked")
-public class ResponseHelperMulti<Model extends IbasicInfo, ChildModel extends IbasicInfo> {
+public class ResponseHelperMulti<Model extends IBasicInfo, ChildModel extends IBasicInfo> {
 
     private Model model;
 

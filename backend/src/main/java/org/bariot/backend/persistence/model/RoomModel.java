@@ -1,9 +1,11 @@
 package org.bariot.backend.persistence.model;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.bariot.backend.utils.IbasicInfo;
+import org.bariot.backend.utils.IBasicInfo;
+import org.bariot.backend.utils.IsUnique;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,7 +21,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "ROOMS")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class RoomModel implements Serializable, IbasicInfo {
+public class RoomModel implements Serializable, IBasicInfo<DeviceModel> {
 
     @Id
     @GeneratedValue
@@ -33,7 +35,7 @@ public class RoomModel implements Serializable, IbasicInfo {
     @JoinColumn(name = "HOME_ID", nullable = false)
     private HomeModel home;
 
-    @OneToMany(cascade = CascadeType.ALL, targetEntity = DeviceModel.class, mappedBy = "room")
+    @OneToMany(targetEntity = DeviceModel.class, mappedBy = "room")
     private List<DeviceModel> listDevices;
 
     public RoomModel() {
@@ -43,13 +45,26 @@ public class RoomModel implements Serializable, IbasicInfo {
         this.name = name;
     }
 
+    @JsonGetter("home")
+    public HomeModel getHome() {
+        return home;
+    }
+
+    public void setHome(HomeModel home) {
+        if (home != null) {
+            this.home = home;
+            return;
+        }
+        this.home = home;
+    }
+
     @Override
-    public Long getId() {
+    public long getID() {
         return this.id;
     }
 
     @Override
-    public void setId(Long id) {
+    public void setID(long id) {
         this.id = id;
     }
 
@@ -59,28 +74,34 @@ public class RoomModel implements Serializable, IbasicInfo {
     }
 
     @Override
-    public boolean addToSubSet(Object item) {
-        try {
-            if (item instanceof DeviceModel) {
-                listDevices.add((DeviceModel) item);
-                return true;
-            } else
-                return false;
-        } catch (Exception e) {
-            return false;
+    public boolean addToSubSet(DeviceModel item) {
+        if (item != null) {
+            if (!IsUnique.itemAlreadyInList(listDevices, item))
+                listDevices.add(item);
+            return true;
         }
+        return false;
     }
 
     @Override
-    public long getCountOfSub() {
-        if (listDevices == null)
-            return 0;
-        else
+    public Integer getCountOfSub() {
+        if (listDevices != null)
             return listDevices.size();
+        return 0;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @JsonIgnore
+    public List<DeviceModel> getListDevices() {
+        return listDevices;
     }
 
     @Override
-    public List getAllSubs() {
+    @JsonIgnore
+    public List<DeviceModel> getAllSubs() {
         return listDevices;
     }
 
@@ -92,9 +113,9 @@ public class RoomModel implements Serializable, IbasicInfo {
             return false;
         else {
             RoomModel room = (RoomModel) obj;
-            return (this.getId().equals(room.getId())
+            return (this.getID() == room.getID()
                     && this.getName().equals(room.getName())
-                    && this.getCountOfSub() == room.getCountOfSub()
+                    && this.getCountOfSub().equals(room.getCountOfSub())
                     && this.getAllSubs() == room.getAllSubs()
             );
         }
@@ -103,13 +124,5 @@ public class RoomModel implements Serializable, IbasicInfo {
     @Override
     public int hashCode() {
         return Objects.hash(id, name);
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<DeviceModel> getListDevices() {
-        return listDevices;
     }
 }

@@ -1,7 +1,7 @@
 package org.bariot.backend.persistence.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.bariot.backend.utils.IbasicInfo;
+import org.bariot.backend.utils.Identifiable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,12 +12,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.List;
 
 @Entity
 @Table(name = "DEVICES")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class DeviceModel implements Serializable, IbasicInfo {
+public class DeviceModel implements Serializable, Identifiable {
 
     @Id
     @GeneratedValue
@@ -39,33 +38,18 @@ public class DeviceModel implements Serializable, IbasicInfo {
     }
 
     @Override
-    public Long getId() {
+    public long getID() {
         return this.id;
     }
 
     @Override
-    public void setId(Long id) {
+    public void setID(long id) {
         this.id=id;
     }
 
     @Override
     public String getName() {
         return this.name;
-    }
-
-    @Override
-    public boolean addToSubSet(Object item) {
-        return false;
-    }
-
-    @Override
-    public long getCountOfSub() {
-        return 0;
-    }
-
-    @Override
-    public List getAllSubs() {
-        return null;
     }
 
     public RoomModel getRoom() {

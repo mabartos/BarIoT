@@ -2,9 +2,8 @@ package org.bariot.backend.persistence.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.bariot.backend.utils.IbasicInfo;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
+import org.bariot.backend.utils.IBasicInfo;
+import org.bariot.backend.utils.IsUnique;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,7 +23,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "USERS")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class UserModel implements Serializable, IbasicInfo {
+public class UserModel implements Serializable, IBasicInfo<HomeModel> {
 
     @Id
     @SequenceGenerator(name = "user_sequence", sequenceName = "user_seq", allocationSize = 1)
@@ -66,8 +65,13 @@ public class UserModel implements Serializable, IbasicInfo {
     }
 
     @Override
-    public Long getId() {
+    public long getID() {
         return this.id;
+    }
+
+    @Override
+    public void setID(long id) {
+        this.id = id;
     }
 
     @Override
@@ -77,24 +81,19 @@ public class UserModel implements Serializable, IbasicInfo {
     }
 
     @Override
-    public boolean addToSubSet(Object item) {
-        try {
-            if (item instanceof HomeModel) {
-                homesList.add((HomeModel) item);
-                return true;
-            } else
-                return false;
-        } catch (Exception e) {
-            return false;
+    public boolean addToSubSet(HomeModel item) {
+        if (item != null && !IsUnique.itemAlreadyInList(homesList, item)) {
+            homesList.add(item);
+            return true;
         }
+        return false;
     }
 
     @Override
-    public long getCountOfSub() {
-        if (homesList == null)
-            return 0;
-        else
+    public Integer getCountOfSub() {
+        if (homesList != null)
             return homesList.size();
+        return 0;
     }
 
     @Override
@@ -126,10 +125,6 @@ public class UserModel implements Serializable, IbasicInfo {
     public void setUserName(String name){
         this.userName=name;
     }
-    @Override
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     @Override
     public boolean equals(Object obj) {
@@ -139,7 +134,7 @@ public class UserModel implements Serializable, IbasicInfo {
             return false;
         else {
             UserModel object = (UserModel) obj;
-            return (object.getId() == this.getId()
+            return (object.getID() == this.getID()
                     && object.getName().equals(this.getName())
                     && object.getCountOfSub() == this.getCountOfSub()
                     && object.getFirstName().equals(this.getFirstName())

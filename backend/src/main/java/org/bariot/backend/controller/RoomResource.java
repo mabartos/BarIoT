@@ -1,12 +1,9 @@
 package org.bariot.backend.controller;
 
 
-import org.bariot.backend.persistence.model.HomeModel;
 import org.bariot.backend.persistence.model.RoomModel;
-import org.bariot.backend.persistence.repo.RoomsRepository;
-import org.bariot.backend.persistence.repo.UsersRepository;
-import org.bariot.backend.utils.ResponseHelperMulti;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.bariot.backend.service.core.GeneralLayeredService;
+import org.bariot.backend.utils.responseHelper.GeneralLayeredResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,10 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Map;
 
 import static org.bariot.backend.controller.UserHomeResource.HOME_MAPPING;
 
@@ -35,88 +29,65 @@ public class RoomResource {
 
     public static final String ROOM_MAPPING = HOME_MAPPING + ROOM_BASIC_URL + ROOM_ID;
 
-    @Autowired
-    private UsersRepository userRepo;
-    
-    private ResponseHelperMulti<HomeModel, RoomModel> helper;
+    private GeneralLayeredResponse<RoomModel> generalResponse;
 
-    @PostConstruct
-    public void init() {
-        helper = new ResponseHelperMulti<>(userRepo);
+    public RoomResource(GeneralLayeredService generalService) {
+        this.generalResponse = new GeneralLayeredResponse<>(generalService);
     }
-
     // Basic operations
 
     @GetMapping(ROOM_BASIC_URL)
-    public ResponseEntity<List<RoomModel>> getRooms(
+    public ResponseEntity getRooms(
             @PathVariable("id") Long id,
             @PathVariable("idHome") Long idHome
     ) {
-        if (helper.isInited(id, idHome)) {
-            return helper.getAll();
-        }
-        return ResponseEntity.notFound().build();
+        return generalResponse.getAllItems(id, idHome);
     }
 
     @GetMapping(ROOM_BASIC_URL + ROOM_ID)
-    public ResponseEntity<RoomModel> getRoomByID(
+    public ResponseEntity getRoomByID(
             @PathVariable("id") Long id,
             @PathVariable("idHome") Long idHome,
             @PathVariable("idRoom") Long idRoom
     ) {
-        if (helper.isInited(id, idHome)) {
-            return helper.getItem(idRoom);
-        }
-        return ResponseEntity.notFound().build();
+        return generalResponse.getByID(id, idHome, idRoom);
     }
 
     @PostMapping(ROOM_BASIC_URL)
-    public ResponseEntity<RoomModel> createRoom(
+    public ResponseEntity createRoom(
             @PathVariable("id") Long id,
             @PathVariable("idHome") Long idHome,
             @RequestBody RoomModel room
     ) {
-        if (helper.isInited(id, idHome)) {
-            return helper.createItem(room);
-        }
-        return ResponseEntity.notFound().build();
+        return generalResponse.create(room, id, idHome);
     }
 
     @PutMapping(ROOM_BASIC_URL + ROOM_ID)
-    public ResponseEntity<RoomModel> updateRoom(
+    public ResponseEntity updateRoom(
             @PathVariable("id") Long id,
             @PathVariable("idHome") Long idHome,
             @PathVariable("idRoom") Long idRoom,
             @RequestBody RoomModel room
     ) {
-        if (helper.isInited(id, idHome)) {
-            return helper.updateItem(idRoom, room);
-        }
-        return ResponseEntity.notFound().build();
+        return generalResponse.update(room, id, idHome, idRoom);
     }
 
     @PatchMapping(ROOM_BASIC_URL + ROOM_ID)
-    public ResponseEntity<RoomModel> updateRoomItems(
+    public ResponseEntity updateRoomItems(
             @PathVariable("id") Long id,
             @PathVariable("idHome") Long idHome,
             @PathVariable("idRoom") Long idRoom,
-            @RequestBody Map<String, String> updates
+            @RequestBody String updatesJSON
     ) {
-        if (helper.isInited(id, idHome)) {
-            return helper.updateItemProps(idRoom, updates);
-        }
-        return ResponseEntity.notFound().build();
+        return generalResponse.updateItems(updatesJSON, id, idHome, idRoom);
     }
 
     @DeleteMapping(ROOM_BASIC_URL + ROOM_ID)
-    public ResponseEntity<RoomModel> deleteRoom(
+    public ResponseEntity deleteRoom(
             @PathVariable("id") Long id,
             @PathVariable("idHome") Long idHome,
             @PathVariable("idRoom") Long idRoom
     ) {
-        if (helper.isInited(id, idHome)) {
-            return helper.deleteItemById(idRoom);
-        }
-        return ResponseEntity.notFound().build();
+        return generalResponse.delete(id, idHome, idRoom);
     }
 }

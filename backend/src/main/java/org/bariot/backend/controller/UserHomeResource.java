@@ -1,12 +1,8 @@
 package org.bariot.backend.controller;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.bariot.backend.persistence.model.HomeModel;
-import org.bariot.backend.persistence.model.UserModel;
-import org.bariot.backend.persistence.repo.HomesRepository;
-import org.bariot.backend.persistence.repo.UsersRepository;
-import org.bariot.backend.utils.ResponseHelperMulti;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.bariot.backend.service.core.UserHomeService;
+import org.bariot.backend.utils.responseHelper.UserHomeResponseHelper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,10 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Map;
 
 import static org.bariot.backend.controller.UserResource.USER_MAPPING;
 
@@ -32,93 +25,54 @@ public class UserHomeResource {
     private static final String HOME_BASIC_URL = "/{id:[\\d]+}/homes";
     private static final String HOME_ID = "/{idHome:[\\d]+}";
 
-    @JsonIgnore
     public static final String HOME_MAPPING = UserResource.USER_MAPPING + HOME_BASIC_URL + HOME_ID;
 
-    @Autowired
-    private HomesRepository homesRepo;
+    private UserHomeResponseHelper userHomeHelper;
 
-    @Autowired
-    private UsersRepository userRepo;
-
-    private ResponseHelperMulti<UserModel, HomeModel> helper;
-
-    @PostConstruct
-    public void init() {
-        helper = new ResponseHelperMulti<>(userRepo, homesRepo);
+    public UserHomeResource(UserHomeService userHomeService) {
+        this.userHomeHelper = new UserHomeResponseHelper(userHomeService);
     }
 
-    // Basic operations
-
     @GetMapping(HOME_BASIC_URL)
-    public ResponseEntity<List<HomeModel>> getUsersHomes(@PathVariable("id") Long id) {
-        if (helper.isInited(id)) {
-            return helper.getAll();
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity getUsersHomes(@PathVariable("id") Long id) {
+        return userHomeHelper.getUsersHomes(id);
     }
 
     @PostMapping(HOME_BASIC_URL)
-    public ResponseEntity<HomeModel> createHome(@PathVariable("id") Long id, @RequestBody HomeModel home) {
-        if (helper.isInited(id)) {
-            return helper.createItem(home);
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity createHomeForUser(@PathVariable("id") Long id, @RequestBody HomeModel home) {
+        return userHomeHelper.createHomeForUser(id, home);
     }
 
     @PostMapping(HOME_BASIC_URL + HOME_ID)
-    public ResponseEntity<HomeModel> addExistingHome(@PathVariable("id") Long id, @PathVariable("idHome") Long idHome) {
-        if (helper.isInited(id)) {
-            return helper.addExistingHomeToUser(idHome);
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity addExistingHomeToUser(@PathVariable("id") Long id, @PathVariable("idHome") Long idHome) {
+        return userHomeHelper.addExistingHome(id, idHome);
     }
 
     @DeleteMapping(HOME_BASIC_URL + HOME_ID)
-    public ResponseEntity<HomeModel> removeHomeFromUser(@PathVariable("id") Long id, @PathVariable("idHome") Long idHome) {
-        if (helper.isInited(id)) {
-            return helper.deleteItemById(idHome);
-        }
-        return ResponseEntity.notFound().build();
-    }
-
-    @DeleteMapping(HOME_BASIC_URL)
-    public ResponseEntity<Void> removeAllHomesFromUser(@PathVariable("id") Long id) {
-        if (helper.isInited(id)) {
-            return helper.removeAllSub();
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity removeHomeFromUser(@PathVariable("id") Long id, @PathVariable("idHome") Long idHome) {
+        return userHomeHelper.removeHomeFromUser(id, idHome);
     }
 
     @GetMapping(HOME_BASIC_URL + HOME_ID)
-    public ResponseEntity<HomeModel> getHomeByID(@PathVariable("id") Long id, @PathVariable("idHome") Long idHome) {
-        if (helper.isInited(id)) {
-            return helper.getItem(idHome);
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity getHomeFromUserByID(@PathVariable("id") Long id, @PathVariable("idHome") Long idHome) {
+        return userHomeHelper.getHomeByID(id, idHome);
     }
 
     @PutMapping(HOME_BASIC_URL + HOME_ID)
-    public ResponseEntity<HomeModel> updateHome(
+    public ResponseEntity updateHomeInUser(
             @PathVariable("id") Long id,
             @PathVariable("idHome") Long idHome,
             @RequestBody HomeModel home
     ) {
-        if (helper.isInited(id)) {
-            return helper.updateItem(idHome, home);
-        }
-        return ResponseEntity.notFound().build();
+        return userHomeHelper.updateHome(id, idHome, home);
     }
 
     @PatchMapping(HOME_BASIC_URL + HOME_ID)
-    public ResponseEntity<HomeModel> updateHomeItems(
+    public ResponseEntity updateHomeInUserItems(
             @PathVariable("id") Long id,
             @PathVariable("idHome") Long idHome,
-            @RequestBody Map<String, String> updates
+            @RequestBody String updatesJSON
     ) {
-        if (helper.isInited(id)) {
-            return helper.updateItemProps(idHome, updates);
-        }
-        return ResponseEntity.notFound().build();
+        return userHomeHelper.updateHomeItems(id, idHome, updatesJSON);
     }
 }

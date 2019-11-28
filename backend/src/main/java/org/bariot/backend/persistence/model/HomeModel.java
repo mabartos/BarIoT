@@ -2,7 +2,8 @@ package org.bariot.backend.persistence.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.bariot.backend.utils.IbasicInfo;
+import org.bariot.backend.utils.IBasicInfo;
+import org.bariot.backend.utils.IsUnique;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,7 +24,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "HOMES")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class HomeModel implements Serializable, IbasicInfo {
+public class HomeModel implements Serializable, IBasicInfo<UserModel> {
 
     @Id
     @SequenceGenerator(name = "home_sequence", sequenceName = "home_seq", allocationSize = 1)
@@ -45,6 +46,7 @@ public class HomeModel implements Serializable, IbasicInfo {
                     @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")}
     )
     private List<UserModel> usersList=new ArrayList<>();
+
     @OneToMany(targetEntity = RoomModel.class, mappedBy = "home")
     private List<RoomModel> roomsList;
 
@@ -60,13 +62,17 @@ public class HomeModel implements Serializable, IbasicInfo {
         this.brokerUrl = brokerUrl;
     }
 
+    public List<RoomModel> getRoomsList() {
+        return roomsList;
+    }
+
     @Override
-    public Long getId() {
+    public long getID() {
         return this.id;
     }
 
     @Override
-    public void setId(Long id) {
+    public void setID(long id) {
         this.id = id;
     }
 
@@ -80,24 +86,20 @@ public class HomeModel implements Serializable, IbasicInfo {
     }
 
     @Override
-    public boolean addToSubSet(Object item) {
-        try {
-            if (item instanceof UserModel) {
-                usersList.add((UserModel) item);
-                return true;
-            } else
-                return false;
-        } catch (Exception e) {
-            return false;
+    public boolean addToSubSet(UserModel item) {
+        if (item != null) {
+            if (!IsUnique.itemAlreadyInList(usersList, item))
+                usersList.add(item);
+            return true;
         }
+        return false;
     }
 
     @Override
-    public long getCountOfSub() {
-        if (usersList == null)
-            return 0;
-        else
+    public Integer getCountOfSub() {
+        if (usersList != null)
             return usersList.size();
+        return 0;
     }
 
     @Override
@@ -122,7 +124,7 @@ public class HomeModel implements Serializable, IbasicInfo {
             return false;
         else {
             HomeModel object = (HomeModel) obj;
-            return (object.getId() == this.getId()
+            return (object.getID() == this.getID()
                     && object.getName().equals(this.getName())
                     && object.getCountOfSub() == this.getCountOfSub()
                     && object.getBrokerUrl().equals(this.getBrokerUrl())
@@ -133,9 +135,5 @@ public class HomeModel implements Serializable, IbasicInfo {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, brokerUrl);
-    }
-
-    public List<RoomModel> getRoomsList() {
-        return roomsList;
     }
 }

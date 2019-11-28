@@ -4,49 +4,31 @@ import org.bariot.backend.persistence.model.DeviceModel;
 import org.bariot.backend.persistence.model.HomeModel;
 import org.bariot.backend.persistence.model.RoomModel;
 import org.bariot.backend.persistence.model.UserModel;
-import org.bariot.backend.persistence.repo.UsersRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.bariot.backend.service.core.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @SuppressWarnings("unchecked")
+@Service
 public class UserPathHelper {
 
-    private UserModel user = null;
-    private HomeModel home = null;
-    private RoomModel room = null;
-    private DeviceModel device = null;
-    
-    private UsersRepository userRepo;
+    private UserService userService;
 
-    public UserPathHelper(UsersRepository userRepo) {
-        this.userRepo = userRepo;
+    public UserPathHelper(UserService userService) {
+        this.userService = userService;
     }
 
-    private <Parent extends IbasicInfo, Child extends IbasicInfo> Child getFromList(Parent parent, long id) {
+    private <Parent extends IBasicInfo & Identifiable, Child extends IBasicInfo & Identifiable> Child getFromList(Parent parent, long id) {
         if (parent == null)
             return null;
-        for (Object child : parent.getAllSubs()) {
-            if (((Child) child).getId().equals(id))
-                return (Child) child;
-        }
+        Optional childOpt = parent.getAllSubs().stream().filter(f -> ((Child) f).getID() == id).findFirst();
+        if (childOpt.isPresent())
+            return (Child) childOpt.get();
         return null;
     }
 
-    private UserModel getUser(long id) {
-        Optional opt = userRepo.findById(id);
-        if (opt.isPresent()) {
-            return (UserModel) opt.get();
-        } else
-            return null;
-    }
-
-    public <Model extends IbasicInfo> Model getPath(Long... ids) {
-        if (userRepo == null)
-            return null;
-
+    public <Model extends IBasicInfo> Model getPath(Long... ids) {
         UserModel user = null;
         HomeModel home = null;
         RoomModel room = null;
@@ -56,7 +38,7 @@ public class UserPathHelper {
         for (int i = 0; i < ids.length; i++) {
             switch (i) {
                 case 0:
-                    user = getUser(ids[i]);
+                    user = userService.getByID(ids[i]);
                     if (user == null)
                         return null;
                     last = (Model) user;
