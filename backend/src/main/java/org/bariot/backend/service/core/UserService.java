@@ -5,4 +5,7 @@ import org.bariot.backend.persistence.model.UserModel;
 import org.springframework.stereotype.Service;
 
 public interface UserService extends CRUDServiceSubItems<UserModel, HomeModel> {
+
+    UserModel getUserByUsername(String username);
+
 }

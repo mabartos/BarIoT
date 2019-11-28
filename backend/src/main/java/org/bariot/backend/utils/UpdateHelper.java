@@ -5,6 +5,13 @@ import org.bariot.backend.persistence.model.DeviceModel;
 import org.bariot.backend.persistence.model.HomeModel;
 import org.bariot.backend.persistence.model.RoomModel;
 import org.bariot.backend.persistence.model.UserModel;
+import org.bariot.backend.service.core.CRUDService;
+import org.bariot.backend.service.core.CRUDServiceSubItems;
+import org.bariot.backend.service.core.DeviceService;
+import org.bariot.backend.service.core.HomeService;
+import org.bariot.backend.service.core.RoomService;
+import org.bariot.backend.service.core.UserService;
+import org.bariot.backend.service.core.impl.CRUDServiceImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -12,17 +19,29 @@ import java.util.Map;
 
 @SuppressWarnings("unchecked")
 @Service
-public class UpdateHelper {
+public class UpdateHelper<Model extends Identifiable> {
+
+    private UserService userService;
+    private HomeService homeService;
+    private RoomService roomService;
+    private DeviceService deviceService;
+
+
+    public void setDependency(UserService userService, HomeService homeService, RoomService roomService, DeviceService deviceService) {
+        this.userService = userService;
+        this.homeService = homeService;
+        this.roomService = roomService;
+        this.deviceService = deviceService;
+    }
 
     /**
      * Main function to update Items in model
      *
      * @param model   data, which will be overridden
      * @param updatesJSON new values
-     * @param <Model> Generics Model class
      * @return new Model class with edited parameters
      */
-    public static <Model extends Identifiable> Model updateItems(Model model, String updatesJSON) {
+    public Model updateItems(Model model, String updatesJSON) {
         try {
             ObjectMapper mapper = new ObjectMapper();
 
@@ -51,7 +70,7 @@ public class UpdateHelper {
     /**
      * Update UserModel items
      */
-    private static <Model extends Identifiable> Model updateUser(Model model, Map<String, String> updates) {
+    private Model updateUser(Model model, Map<String, String> updates) {
         UserModel res = (UserModel) model;
         updates.forEach((key, val) -> {
                     if (key.equals("firstName")) {
@@ -67,7 +86,7 @@ public class UpdateHelper {
     /**
      * Update HomeModel items
      */
-    private static <Model extends Identifiable> Model updateHome(Model model, Map<String, String> updates) {
+    private Model updateHome(Model model, Map<String, String> updates) {
         HomeModel res = (HomeModel) model;
         updates.forEach((key, val) -> {
                     if (key.equals("name")) {
@@ -83,12 +102,14 @@ public class UpdateHelper {
     /**
      * Update RoomModel items
      */
-    private static <Model extends Identifiable> Model updateRoom(Model model, Map<String, String> updates) {
+    private Model updateRoom(Model model, Map<String, String> updates) {
         RoomModel res = (RoomModel) model;
         updates.forEach((key, val) -> {
-                    if (key.equals("name")) {
-                        res.setName(val);
-                    }
+            if (key.equals("name")) {
+                res.setName(val);
+            } else if (key.equals("home")) {
+                res.setHome((HomeModel) getByID(val, (CRUDService<Model>) homeService));
+            }
                 }
         );
         return (Model) res;
@@ -97,15 +118,35 @@ public class UpdateHelper {
     /**
      * Update DeviceModel items
      */
-    private static <Model extends Identifiable> Model updateDevice(Model model, Map<String, String> updates) {
+    private Model updateDevice(Model model, Map<String, String> updates) {
         DeviceModel res = (DeviceModel) model;
         updates.forEach((key, val) -> {
-                    if (key.equals("name")) {
-                        res.setName(val);
-                    }
+            if (key.equals("name")) {
+                res.setName(val);
+            } else if (key.equals("room")) {
+                res.setRoom((RoomModel) getByID(val, (CRUDService<Model>) roomService));
+            }
                 }
         );
         return (Model) res;
+    }
+
+    private Model getByID(String value, CRUDService<Model> service) {
+        return getByID(value, service, null);
+    }
+
+
+    //TODO role
+    private Model getByID(String value, CRUDService<Model> service, Integer minRole) {
+        try {
+            if (value == null || service == null || value.equals("null"))
+                return null;
+            long id = Long.parseLong(value);
+            return service.getByID(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

@@ -65,6 +65,15 @@ public class GeneralLayeredServiceImpl<T extends Identifiable, U extends Identif
     }
 
     @Override
+    public Identifiable createFromJSON(String JSON, Long... id) {
+        T model = userPath.getPath(id);
+        if (model != null && JSON != null) {
+            return getService(model).createFromJSON(model, JSON);
+        }
+        return null;
+    }
+
+    @Override
     public T create(Identifiable entity, Long... id) {
         T model = userPath.getPath(id);
         if (model != null && entity != null) {

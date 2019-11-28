@@ -59,9 +59,9 @@ public class DeviceResource {
             @PathVariable("id") Long id,
             @PathVariable("idHome") Long idHome,
             @PathVariable("idRoom") Long idRoom,
-            @RequestBody DeviceModel device
+            @RequestBody String deviceJSON
     ) {
-        return generalResponse.create(device, id, idHome, idRoom);
+        return generalResponse.createFromJSON(deviceJSON, id, idHome, idRoom);
     }
 
     @PutMapping(DEV_BASIC_URL + DEV_ID)

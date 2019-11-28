@@ -9,6 +9,8 @@ public interface GeneralLayeredService<T extends Identifiable> {
 
     T getByID(Long... id);
 
+    T createFromJSON(String JSON, Long... id);
+
     T create(T entity, Long... id);
 
     T update(T entity, Long... id);

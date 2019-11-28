@@ -13,12 +13,28 @@ public class CRUDServiceImpl<T extends Identifiable> implements CRUDService<T> {
 
     private JpaRepository<T, Long> repo;
 
-    public CRUDServiceImpl(JpaRepository<T, Long> repository) {
+    private UpdateHelper<T> updateHelper;
+
+    public CRUDServiceImpl(JpaRepository<T, Long> repository, UpdateHelper<T> updateHelper) {
+        this.updateHelper = updateHelper;
         this.repo = repository;
     }
 
     public JpaRepository<T, Long> getRepository() {
         return repo;
+    }
+
+    @Override
+    public T createFromJSON(T model, String json) {
+        try {
+            if (json != null && model != null) {
+                return updateHelper.updateItems(model, json);
+            }
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -67,7 +83,7 @@ public class CRUDServiceImpl<T extends Identifiable> implements CRUDService<T> {
             Optional opt = repo.findById(id);
             if (opt.isPresent() && updatesJSON != null) {
                 T entity = (T) opt.get();
-                T updated = UpdateHelper.updateItems(entity, updatesJSON);
+                T updated = updateHelper.updateItems(entity, updatesJSON);
                 if (updated != null) {
                     updated.setID(id);
                     return repo.save(updated);

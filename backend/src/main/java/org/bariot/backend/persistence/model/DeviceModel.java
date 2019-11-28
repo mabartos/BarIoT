@@ -56,6 +56,10 @@ public class DeviceModel implements Serializable, Identifiable {
         return room;
     }
 
+    public void setRoom(RoomModel room) {
+        this.room = room;
+    }
+
     public void setName(String name) {
         this.name = name;
     }

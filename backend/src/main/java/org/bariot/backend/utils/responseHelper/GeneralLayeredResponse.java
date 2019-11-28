@@ -37,6 +37,13 @@ public class GeneralLayeredResponse<T extends Identifiable> {
         return ResponseEntity.badRequest().body("Cannot create entity");
     }
 
+    public ResponseEntity createFromJSON(String JSON, Long... id) {
+        T created = (T) generalService.createFromJSON(JSON, id);
+        if (created != null)
+            return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        return ResponseEntity.badRequest().body("Cannot create entity");
+    }
+
     public ResponseEntity update(Identifiable entity, Long... id) {
         T updated = (T) generalService.update(entity, id);
         if (updated != null)

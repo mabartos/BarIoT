@@ -1,7 +1,6 @@
 package org.bariot.backend.service.core;
 
 import org.bariot.backend.utils.Identifiable;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 

@@ -15,6 +15,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,11 +35,18 @@ public class UserModel implements Serializable, IBasicInfo<HomeModel> {
     @Column(name = "USER_NAME", nullable = false, unique = true)
     private String userName;
 
+    @Column(name = "PASSWORD", nullable = false)
+    private String password;
+
     @Column(name = "FIRST_NAME")
     private String firstName;
 
     @Column(name = "LAST_NAME")
     private String lastName;
+
+    @Column(name = "email", unique = true)
+    @Email
+    private String email;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "USERS_HOMES",
@@ -52,14 +60,15 @@ public class UserModel implements Serializable, IBasicInfo<HomeModel> {
     public UserModel() {
     }
 
-    public UserModel(String username) {
+    public UserModel(String username, String password) {
         this.userName = username;
+        this.password = password;
         this.firstName = null;
         this.lastName = null;
     }
 
-    public UserModel(String username, String firstName, String lastName) {
-        this(username);
+    public UserModel(String username, String password, String firstName, String lastName) {
+        this(username, password);
         this.firstName = firstName;
         this.lastName = lastName;
     }
@@ -102,6 +111,10 @@ public class UserModel implements Serializable, IBasicInfo<HomeModel> {
         return homesList;
     }
 
+    public String getEmail() {
+        return this.email;
+    }
+
     public String getUsername() {
         return userName;
     }
@@ -124,6 +137,14 @@ public class UserModel implements Serializable, IBasicInfo<HomeModel> {
 
     public void setUserName(String name){
         this.userName=name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override

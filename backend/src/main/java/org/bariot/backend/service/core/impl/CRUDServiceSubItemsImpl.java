@@ -3,6 +3,7 @@ package org.bariot.backend.service.core.impl;
 import org.bariot.backend.service.core.CRUDServiceSubItems;
 import org.bariot.backend.utils.IBasicInfo;
 import org.bariot.backend.utils.Identifiable;
+import org.bariot.backend.utils.UpdateHelper;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -11,8 +12,8 @@ import java.util.Optional;
 @SuppressWarnings("unchecked")
 public class CRUDServiceSubItemsImpl<Parent extends IBasicInfo<Child>, Child extends Identifiable> extends CRUDServiceImpl<Parent> implements CRUDServiceSubItems<Parent, Child> {
 
-    public CRUDServiceSubItemsImpl(JpaRepository<Parent, Long> repository) {
-        super(repository);
+    public CRUDServiceSubItemsImpl(JpaRepository<Parent, Long> repository, UpdateHelper<Parent> updateHelper) {
+        super(repository, updateHelper);
     }
 
     @Override

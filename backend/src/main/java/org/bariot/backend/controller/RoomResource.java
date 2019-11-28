@@ -57,9 +57,9 @@ public class RoomResource {
     public ResponseEntity createRoom(
             @PathVariable("id") Long id,
             @PathVariable("idHome") Long idHome,
-            @RequestBody RoomModel room
+            @RequestBody String roomJSON
     ) {
-        return generalResponse.create(room, id, idHome);
+        return generalResponse.createFromJSON(roomJSON, id, idHome);
     }
 
     @PutMapping(ROOM_BASIC_URL + ROOM_ID)
