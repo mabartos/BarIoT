@@ -1,0 +1,25 @@
+
+GET     /users      - Get All users
+POST    /users      - Create user
+PATCH   /users/:id  - Update user with ID
+DELETE  /users/:id  - delete...
+
+GET     /homes      - Get All homes
+POST    /homes      - Create home
+PATCH   /homes/:id  - Update home with ID
+DELETE  /homes/:id  - delete...
+
+GET     /users/:id/homes      - Get All user's homes
+POST    /users/:id/homes     - Create home to user
+POST   /users/:id/homes/:idHome  - Add existing home to user
+DELETE  /users/:id/homes/:idHome  - remove home from user...
+GET  /users/:id/homes/:idHome  - get home from user
+PATCH  /users/:id/homes/:idHome  - update home in user
+
+
+GET   /users/:id/homes/:idHome/rooms/  - Get all rooms from home from user
+...etc.
+
+
+
+
