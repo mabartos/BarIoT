@@ -7,6 +7,8 @@ import java.util.List;
 public interface CRUDService<T extends Identifiable> {
 
     T createFromJSON(T model, String json);
+
+    T createFromJSON(T model, String json, Long parentID);
     
     T create(T model);
 

@@ -24,7 +24,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "HOMES")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class HomeModel implements Serializable, IBasicInfo<UserModel> {
+public class HomeModel implements Serializable, IBasicInfo<RoomModel> {
 
     @Id
     @SequenceGenerator(name = "home_sequence", sequenceName = "home_seq", allocationSize = 1)
@@ -85,8 +85,8 @@ public class HomeModel implements Serializable, IBasicInfo<UserModel> {
         return this.name;
     }
 
-    @Override
-    public boolean addToSubSet(UserModel item) {
+
+    public boolean addToUsers(UserModel item) {
         if (item != null) {
             if (!IsUnique.itemAlreadyInList(usersList, item))
                 usersList.add(item);
@@ -95,17 +95,36 @@ public class HomeModel implements Serializable, IBasicInfo<UserModel> {
         return false;
     }
 
-    @Override
-    public Integer getCountOfSub() {
+    public List<UserModel> getAllUsers() {
+        return usersList;
+    }
+
+    public Integer getCountOfUsers() {
         if (usersList != null)
             return usersList.size();
+        return null;
+    }
+
+    @Override
+    public boolean addToSubSet(RoomModel item) {
+        if (item != null && roomsList != null) {
+            roomsList.add(item);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Integer getCountOfSub() {
+        if (roomsList != null)
+            return roomsList.size();
         return 0;
     }
 
     @Override
     @JsonIgnore
-    public List<UserModel> getAllSubs() {
-        return usersList;
+    public List<RoomModel> getAllSubs() {
+        return roomsList;
     }
 
     public String getBrokerUrl() {
@@ -126,7 +145,7 @@ public class HomeModel implements Serializable, IBasicInfo<UserModel> {
             HomeModel object = (HomeModel) obj;
             return (object.getID() == this.getID()
                     && object.getName().equals(this.getName())
-                    && object.getCountOfSub() == this.getCountOfSub()
+                    && object.getCountOfSub().equals(this.getCountOfSub())
                     && object.getBrokerUrl().equals(this.getBrokerUrl())
             );
         }

@@ -55,7 +55,7 @@ public class RoomModel implements Serializable, IBasicInfo<DeviceModel> {
             this.home = home;
             return;
         }
-        this.home = home;
+        this.home = null;
     }
 
     @Override

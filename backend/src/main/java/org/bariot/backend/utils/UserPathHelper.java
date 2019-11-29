@@ -28,6 +28,7 @@ public class UserPathHelper {
         return null;
     }
 
+
     public <Model extends IBasicInfo> Model getPath(Long... ids) {
         UserModel user = null;
         HomeModel home = null;

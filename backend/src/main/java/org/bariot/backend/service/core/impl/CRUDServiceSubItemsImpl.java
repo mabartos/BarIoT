@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 @SuppressWarnings("unchecked")
-public class CRUDServiceSubItemsImpl<Parent extends IBasicInfo<Child>, Child extends Identifiable> extends CRUDServiceImpl<Parent> implements CRUDServiceSubItems<Parent, Child> {
+public class CRUDServiceSubItemsImpl<Parent extends IBasicInfo<Child>, Child extends Identifiable>
+        extends CRUDServiceImpl<Parent> implements CRUDServiceSubItems<Parent, Child> {
 
     public CRUDServiceSubItemsImpl(JpaRepository<Parent, Long> repository, UpdateHelper<Parent> updateHelper) {
         super(repository, updateHelper);

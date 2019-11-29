@@ -28,7 +28,7 @@ public class GeneralLayeredServiceImpl<T extends Identifiable, U extends Identif
     private RoomService roomService;
     private DeviceService deviceService;
 
-    private CRUDService<T> getService(T model) {
+    private CRUDService<T> getService(Identifiable model) {
         if (model != null) {
             if (model instanceof UserModel)
                 return (CRUDService<T>) userService;
@@ -66,18 +66,35 @@ public class GeneralLayeredServiceImpl<T extends Identifiable, U extends Identif
 
     @Override
     public Identifiable createFromJSON(String JSON, Long... id) {
-        T model = userPath.getPath(id);
+        U model = userPath.getPath(id);
+        T result = null;
         if (model != null && JSON != null) {
-            return getService(model).createFromJSON(model, JSON);
+            if (model instanceof UserModel) {
+                result = (T) new HomeModel();
+                result = (T) homeService.createFromJSON((HomeModel) result, JSON);
+            } else if (model instanceof HomeModel) {
+                result = (T) new RoomModel();
+                result = (T) roomService.createFromJSON((RoomModel) result, JSON, model.getID());
+            } else if (model instanceof RoomModel) {
+                result = (T) new DeviceModel();
+                result = (T) deviceService.createFromJSON((DeviceModel) result, JSON, model.getID());
+            }
+            if (result != null) {
+                model.addToSubSet(result);
+                return result;
+            }
         }
         return null;
     }
 
     @Override
     public T create(Identifiable entity, Long... id) {
-        T model = userPath.getPath(id);
+        U model = userPath.getPath(id);
         if (model != null && entity != null) {
-            return getService(model).create((T) entity);
+            T created = getService(entity).create((T) entity);
+            if (created != null && model.addToSubSet(created)) {
+                return created;
+            }
         }
         return null;
     }
@@ -86,7 +103,7 @@ public class GeneralLayeredServiceImpl<T extends Identifiable, U extends Identif
     public Identifiable update(Identifiable entity, Long... id) {
         T model = userPath.getPath(id);
         if (model != null && entity != null) {
-            return getService(model).update(model.getID(), (T) entity);
+            return getService(entity).update(model.getID(), (T) entity);
         }
         return null;
     }

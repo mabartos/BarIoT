@@ -26,9 +26,14 @@ public class CRUDServiceImpl<T extends Identifiable> implements CRUDService<T> {
 
     @Override
     public T createFromJSON(T model, String json) {
+        return createFromJSON(model, json, null);
+    }
+
+    @Override
+    public T createFromJSON(T model, String json, Long parentID) {
         try {
             if (json != null && model != null) {
-                return updateHelper.updateItems(model, json);
+                return updateHelper.updateItems(model, json, parentID);
             }
             return null;
         } catch (Exception e) {

@@ -6,12 +6,10 @@ import org.bariot.backend.persistence.model.HomeModel;
 import org.bariot.backend.persistence.model.RoomModel;
 import org.bariot.backend.persistence.model.UserModel;
 import org.bariot.backend.service.core.CRUDService;
-import org.bariot.backend.service.core.CRUDServiceSubItems;
 import org.bariot.backend.service.core.DeviceService;
 import org.bariot.backend.service.core.HomeService;
 import org.bariot.backend.service.core.RoomService;
 import org.bariot.backend.service.core.UserService;
-import org.bariot.backend.service.core.impl.CRUDServiceImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -34,6 +32,10 @@ public class UpdateHelper<Model extends Identifiable> {
         this.deviceService = deviceService;
     }
 
+    public Model updateItems(Model model, String updatesJSON) {
+        return updateItems(model, updatesJSON, null);
+    }
+
     /**
      * Main function to update Items in model
      *
@@ -41,7 +43,7 @@ public class UpdateHelper<Model extends Identifiable> {
      * @param updatesJSON new values
      * @return new Model class with edited parameters
      */
-    public Model updateItems(Model model, String updatesJSON) {
+    public Model updateItems(Model model, String updatesJSON, Long parentID) {
         try {
             ObjectMapper mapper = new ObjectMapper();
 
@@ -55,9 +57,9 @@ public class UpdateHelper<Model extends Identifiable> {
                 } else if (model instanceof HomeModel) {
                     return updateHome(model, updates);
                 } else if (model instanceof RoomModel) {
-                    return updateRoom(model, updates);
+                    return updateRoom(model, updates, parentID);
                 } else if (model instanceof DeviceModel) {
-                    return updateDevice(model, updates);
+                    return updateDevice(model, updates, parentID);
                 }
             }
             return null;
@@ -102,13 +104,14 @@ public class UpdateHelper<Model extends Identifiable> {
     /**
      * Update RoomModel items
      */
-    private Model updateRoom(Model model, Map<String, String> updates) {
+    private Model updateRoom(Model model, Map<String, String> updates, Long parentID) {
         RoomModel res = (RoomModel) model;
         updates.forEach((key, val) -> {
             if (key.equals("name")) {
                 res.setName(val);
-            } else if (key.equals("home")) {
-                res.setHome((HomeModel) getByID(val, (CRUDService<Model>) homeService));
+            }
+            if (parentID != null) {
+                res.setHome((HomeModel) getByID(parentID.toString(), (CRUDService<Model>) homeService));
             }
                 }
         );
@@ -118,13 +121,14 @@ public class UpdateHelper<Model extends Identifiable> {
     /**
      * Update DeviceModel items
      */
-    private Model updateDevice(Model model, Map<String, String> updates) {
+    private Model updateDevice(Model model, Map<String, String> updates, Long parentID) {
         DeviceModel res = (DeviceModel) model;
         updates.forEach((key, val) -> {
             if (key.equals("name")) {
                 res.setName(val);
-            } else if (key.equals("room")) {
-                res.setRoom((RoomModel) getByID(val, (CRUDService<Model>) roomService));
+            }
+            if (parentID != null) {
+                res.setRoom((RoomModel) getByID(parentID.toString(), (CRUDService<Model>) roomService));
             }
                 }
         );
@@ -134,7 +138,6 @@ public class UpdateHelper<Model extends Identifiable> {
     private Model getByID(String value, CRUDService<Model> service) {
         return getByID(value, service, null);
     }
-
 
     //TODO role
     private Model getByID(String value, CRUDService<Model> service, Integer minRole) {
