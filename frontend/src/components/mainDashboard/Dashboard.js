@@ -1,5 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
+import { Switch, Route,Link, BrowserRouter } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -11,17 +12,24 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
-import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import { mainListItems, secondaryListItems } from './listItems';
 import Grid from '@material-ui/core/Grid';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import HomeIcon from '@material-ui/icons/Home';
 import GeneralTile from '../GeneralTile';
+import AddTile from '../AddTile';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import HouseIcon from '@material-ui/icons/House';
+import Collapse from '@material-ui/core/Collapse';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import UserProfile from '../UserProfile.js'
+
 
 export function Copyright() {
   return (
@@ -53,7 +61,6 @@ export const useStyles = makeStyles(theme => ({
     ...theme.mixins.toolbar,
   },
   appBar: {
-
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
@@ -117,36 +124,36 @@ export const useStyles = makeStyles(theme => ({
     height: 240,
   },
   blueGradientContent: {
-    background: 'rgb(5, 2, 52)',
-    background: 'linear-gradient(27deg, rgba(5, 2, 52, 1) 0%, rgba(9, 9, 121, 1) 28%, rgba(0, 212, 255, 1) 100%)',
     width: '100%'
   },
-  blueGradientBar: {
-    color: 'white',
-    background: 'transparent',
-    boxShadow: 'none'
+  nested: {
+    paddingLeft: theme.spacing(4)
   },
-  blueGradientSideBar: {
-    color: 'white',
-    background: 'linear-gradient( 108.9deg,  rgba(21,65,168,1) 4.9%, rgba(120,232,173,1) 97% )'
-  }
+  
 }));
+
 
 export default function Dashboard({ homes }) {
   const classes = useStyles();
+  
   const [open, setOpen] = React.useState(false);
+  const [open_h, setOpen_h] = React.useState(true);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  const handleClick = () => {
+    setOpen_h(!open_h);
+  };
+
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar position="absolute" className={clsx(classes.appBar, classes.blueGradientBar, open && classes.appBarShift)}>
+      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
         <Toolbar className={classes.toolbar}>
           <IconButton
             edge="start"
@@ -157,8 +164,8 @@ export default function Dashboard({ homes }) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography component="h1" variant="h4" color="inherit" noWrap className={classes.title}>
-            Homes
+          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+            Username
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
@@ -167,10 +174,10 @@ export default function Dashboard({ homes }) {
           </IconButton>
         </Toolbar>
       </AppBar>
-      <Drawer
+       <Drawer
         variant="permanent"
         classes={{
-          paper: clsx(classes.drawerPaper, classes.blueGradientSideBar, !open && classes.drawerPaperClose),
+          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
         }}
         open={open}
       >
@@ -180,30 +187,94 @@ export default function Dashboard({ homes }) {
           </IconButton>
         </div>
         <Divider />
-        {homes.map((item) => (
-          <ListItem button>
+          <ListItem 
+          component={Link} to={"/dashboard"}
+          button 
+          >
             <ListItemIcon>
               <DashboardIcon />
             </ListItemIcon>
-            <ListItemText primary={item.name} />
+            <ListItemText primary={"Dashboard"} />
           </ListItem>
-        ))
-        }
-        <List>{mainListItems}</List>
+
+          <ListItem button onClick={handleClick}>
+            <ListItemIcon>
+              <HouseIcon />
+            </ListItemIcon>
+            <ListItemText primary="Homes" />
+            {open_h ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
+        <Collapse in={open_h} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          <ListItem
+            component={Link} to={"/dashboard/Home_1"}
+           button className={classes.nested} button
+          >
+            <ListItemIcon>
+              <HomeIcon />
+            </ListItemIcon>
+            <ListItemText primary="Home_1" />
+          </ListItem>
+        </List>
+      </Collapse>
+      <ListItem 
+          component={Link} to={"/dashboard/UserProfile"}
+          button
+          
+          >
+            <ListItemIcon>
+              <AccountCircleIcon />
+            </ListItemIcon>
+            <ListItemText primary="User Profile"/>
+          </ListItem>
+
         <Divider />
-        <List>{secondaryListItems}</List>
       </Drawer>
       <div className={classes.blueGradientContent}>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
-          <Container maxWidth="lg" className={classes.container}>
-            <Grid container spacing={3}>
-              {homes.map((home) =>
-                <GeneralTile name={home.name} imageUrl="/assets/52921.jpg"/>
-              )}
-
-            </Grid>
-          </Container>
+          <Switch>
+            <Route exact path="/dashboard" render={() => 
+              <div>
+                <Container maxWidth="lg" className={classes.container}>
+                  <Grid container spacing={3}>
+                    <GeneralTile name={"Home_1"} imageName="flat" type="home" link="/dashboard/Home_1"/>
+                    <GeneralTile name={"Home_2"} imageName="camper_van" type="home"/>
+                    <GeneralTile name={"Home_3"} imageName="other" type="home"/>
+                    <GeneralTile name={"Home_4"} imageName="house" type="home"/>
+                    <AddTile name={"Home"}/>
+                  </Grid>
+                </Container>
+              </div>} 
+            />
+            <Route path="/dashboard/Home_1" render={() => 
+            <div>
+              <Container maxWidth="lg" className={classes.container}>
+                <Grid container spacing={3}>
+                  <GeneralTile name={"Room_1"} imageName="kitchen" type="room" link="/dashboard/Home_1_Room_1"/>
+                  <GeneralTile name={"Room_1"} imageName="garage" type="room"/>
+                  <GeneralTile name={"Room_2"} imageName="room" type="room"/>
+                  <GeneralTile name={"Room_3"} imageName="bathroom" type="room"/>
+                  <GeneralTile name={"Room_4"} imageName="other" type="room"/>
+                  <GeneralTile name={"Room_4"} imageName="livingroom" type="room"/>
+                  <AddTile name={"Room"}/>
+                </Grid>
+              </Container>
+            </div>} />
+            <Route path="/dashboard/UserProfile">
+              <UserProfile/>
+            </Route>
+            <Route path="/dashboard/Home_1_Room_1">
+            <div>
+              <Container maxWidth="lg" className={classes.container}>
+                <Grid container spacing={3}>
+                  <AddTile name={"Device"}/>
+                </Grid>
+              </Container>
+            </div>
+            </Route>
+          </Switch>
+          
           <Copyright />
         </main>
       </div>
