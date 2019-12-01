@@ -23,15 +23,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Link } from "react-router-dom";
-import { CircularProgressbar } from 'react-circular-progressbar';
-import 'react-circular-progressbar/dist/styles.css';
-import Paper from '@material-ui/core/Paper';
-import ProgressBar from './ProgressBar'
-import TileLight from './TileLight'
-import TileSocket from './TileSocket'
-import TileAC from './TileAC'
-import TileHeater from './TileHeater'
-import TileStats from './TileStats'
+
 
 const useStyles = makeStyles(theme => ({
 
@@ -51,7 +43,7 @@ const useStyles = makeStyles(theme => ({
         fontSize: 'large'
     },
     media: {
-        minHeight: 0,
+        height: 0,
         paddingTop: '56.25%', // 16:9
         backgroundSize: 'cover',
     },
@@ -62,11 +54,6 @@ const useStyles = makeStyles(theme => ({
         marginLeft: 'auto',
         marginRight: 'auto',
     },
-    paper: {
-      padding: theme.spacing(1),
-      textAlign: 'center',
-      color: 'black',
-  },
 }));
 
 const variantIcon = {
@@ -103,7 +90,7 @@ function MySnackbarContentWrapper(props) {
     const classes = useStyles1();
     const { className, message, onClose, variant, ...other } = props;
     const Icon = variantIcon[variant];
-    
+  
     return (
       <SnackbarContent
         className={clsx(classes[variant], className)}
@@ -158,9 +145,6 @@ export default function GeneralTile(props) {
     const click=(e)=>{
        //TODO redirect ??
     }
-    const value = 30;
-    const progbarval= value -16;
-    const humidity = 66;
     var bg=require(`../assets/${props.imageName}.jpg`)
     return (
         <Grid item xs={12} md={4} spacing={2}>
@@ -221,91 +205,12 @@ export default function GeneralTile(props) {
                       </div>
                       }
                 />
-
-
-
-
-                {(() => {
-                    if(props.type === 'device'){
-                      switch(props.devtype){
-                        case 'temp':
-                        case 'hum' : 
-                          return(
-                            <ProgressBar type={props.devtype}/>
-                         )
-                        case 'light': 
-                          return(
-                            <div>
-                              <CardMedia 
-                                className={classes.root}
-                                style={{background:'white'}}                   
-                              >
-                                <TileLight/>
-                              </CardMedia>
-                            </div>
-                            
-                            
-                          )
-                        case 'socket':
-                          return(
-                            <div>
-                              <CardMedia 
-                                className={classes.root}
-                                style={{background:'white'}}                   
-                              >
-                                <TileSocket/>
-                              </CardMedia>
-                            </div>
-                          )
-                        case 'ac': 
-                          return(
-                            <div>
-                              <CardMedia 
-                                className={classes.root}
-                                style={{background:'white'}}                   
-                              >
-                              <TileAC/>
-                              </CardMedia>
-                            </div>
-                          )
-                        case 'heater': 
-                          return(
-                            <div>
-                              <CardMedia 
-                                className={classes.root}
-                                style={{background:'white'}}                   
-                              >
-                              <TileHeater/>
-                              </CardMedia>
-                            </div>
-                          )
-                        case 'stats': 
-                          return(
-                            <div>
-                              <CardMedia 
-                                className={classes.root}
-                                style={{background:'white'}}                   
-                              >
-                              <TileStats/>
-                              </CardMedia>
-                            </div>
-                          )
-                            
-                      }
-                      
-                        
-                    }
-                    else{
-                      return(
-                        <CardMedia
-                          component={Link} to={props.link}
-                          className={classes.media}
-                          style={{backgroundImage:`url(${bg})`}}
-                          onClick={click}
-                        />
-                      )
-                    }  
-                })()}
+                <CardMedia
+                    component={Link} to={props.link}
+                    className={classes.media}
+                    style={{backgroundImage:`url(${bg})`}}
+                    onClick={click}
+                />
             </Card>
         </Grid>
     );
