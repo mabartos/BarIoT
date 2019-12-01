@@ -49,6 +49,7 @@ const useStyles = makeStyles(theme => ({
     'Heater',
     'Air conditioner',
     'Socket',
+    'Stats',
   ];
 
   export default function SimpleSelect(props) {

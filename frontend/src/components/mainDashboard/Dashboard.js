@@ -29,6 +29,8 @@ import HouseIcon from '@material-ui/icons/House';
 import Collapse from '@material-ui/core/Collapse';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import UserProfile from '../UserProfile.js'
+import MySwitch from '../MySwitch'
+
 
 
 export function Copyright() {
@@ -111,6 +113,7 @@ export const useStyles = makeStyles(theme => ({
     overflow: 'auto',
   },
   container: {
+    minWidth : 600,
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
   },
@@ -133,7 +136,7 @@ export const useStyles = makeStyles(theme => ({
 }));
 
 
-export default function Dashboard({ homes }) {
+export default function Dashboard() {
   const classes = useStyles();
   
   const [open, setOpen] = React.useState(false);
@@ -147,7 +150,7 @@ export default function Dashboard({ homes }) {
   const handleClick = () => {
     setOpen_h(!open_h);
   };
-
+  const value = 25;
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
@@ -264,10 +267,21 @@ export default function Dashboard({ homes }) {
             <Route path="/dashboard/UserProfile">
               <UserProfile/>
             </Route>
+            <Route path="/dashboard/test" render={() => 
+              <div><MySwitch/></div>} />
+              
+            
             <Route path="/dashboard/Home_1_Room_1">
             <div>
               <Container maxWidth="lg" className={classes.container}>
                 <Grid container spacing={3}>
+                  <GeneralTile name={"Temp"} imageName="livingroom" type="device" devtype="temp"/>
+                  <GeneralTile name={"Humidity"} imageName="livingroom" type="device" devtype="hum"/>
+                  <GeneralTile name={"Light"} imageName="livingroom" type="device" devtype="light"/>
+                  <GeneralTile name={"Socket"} imageName="livingroom" type="device" devtype="socket"/>
+                  <GeneralTile name={"Air Conditioner"} imageName="livingroom" type="device" devtype="ac"/>
+                  <GeneralTile name={"Heater"} imageName="livingroom" type="device" devtype="heater"/>
+                  <GeneralTile name={"Power Stats"} imageName="livingroom" type="device" devtype="stats"/>
                   <AddTile name={"Device"}/>
                 </Grid>
               </Container>
