@@ -8,7 +8,7 @@ First, you have to execute this command from this directory.
 
 ```
 cd backend/
-mvn springboot:run
+mvn spring-boot:run
 ```
 
 Backend should run on port 8080, in case the port is used, the port is contained in server log.
@@ -23,6 +23,8 @@ The file is confidential.
 ```
 cd frontend/
 npm install
+npm install --save react-chartjs-2 chart.js
+npm install --save react-circular-progressbar
 npm start
 ```
 
