@@ -58,7 +58,7 @@ public class DataLoader implements ApplicationRunner {
 
 
         RoomModel home1room1 = roomService.create(new RoomModel("room1", home1,RoomType.KITCHEN,"kitchen.png"));
-        RoomModel home1room2 = roomService.create(new RoomModel("room2", home1,RoomType.LIVING_ROOM,"living.com"));
+        RoomModel home1room2 = roomService.create(new RoomModel("room2", home1,RoomType.LIVING_ROOM,"livingroom.jpg"));
         RoomModel home1room3 = roomService.create(new RoomModel("room3", home1,RoomType.BATHROOM,"bathroom.png"));
 
         RoomModel home2room1 = roomService.create(new RoomModel("room1", home2,RoomType.ROOM,"room.jpg"));
