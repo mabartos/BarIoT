@@ -19,11 +19,13 @@ public class UserHomeServiceImpl implements UserHomeService {
 
     private HomeService homeService;
     private UserPathHelper userPath;
+    private UserService userService;
 
     @Autowired
     public void setDependency(UserService userService, HomeService homeService) {
         this.homeService = homeService;
         this.userPath = new UserPathHelper(userService);
+        this.userService = userService;
     }
 
     @Override
@@ -42,6 +44,7 @@ public class UserHomeServiceImpl implements UserHomeService {
         if (user != null && created != null) {
             user.addToSubSet(created);
             created.addToUsers(user);
+            userService.update(user.getID(), user);
             return created;
         }
         return null;
@@ -54,6 +57,7 @@ public class UserHomeServiceImpl implements UserHomeService {
         if (user != null && home != null) {
             user.addToSubSet(home);
             home.addToUsers(user);
+            userService.update(user.getID(), user);
             return home;
         }
         return null;
@@ -64,7 +68,8 @@ public class UserHomeServiceImpl implements UserHomeService {
         UserModel user = userPath.getPath(id);
         HomeModel home = homeService.getByID(idHome);
         if (user != null && home != null) {
-            return user.getAllSubs().removeIf(f -> f.equals(home));
+            if (user.getAllSubs().removeIf(f -> f.equals(home)))
+                userService.update(user.getID(), user);
         }
         return false;
     }

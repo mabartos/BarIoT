@@ -2,7 +2,9 @@ package org.bariot.backend.service.core.impl;
 
 import org.bariot.backend.persistence.model.HomeModel;
 import org.bariot.backend.persistence.model.UserModel;
+import org.bariot.backend.persistence.repo.UsersRepository;
 import org.bariot.backend.service.core.UserService;
+import org.bariot.backend.utils.IsUnique;
 import org.bariot.backend.utils.UpdateHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -27,6 +29,8 @@ public class UserServiceImpl extends CRUDServiceSubItemsImpl<UserModel, HomeMode
         try {
             if (model != null && model.getPassword() != null) {
                 model.setPassword(encoder.encode(model.getPassword()));
+                if (model.getEmail() != null && IsUnique.emailExists((UsersRepository) getRepository(), model.getEmail()))
+                    return null;
                 return getRepository().save(model);
             }
             return null;

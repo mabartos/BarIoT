@@ -24,10 +24,10 @@ import static org.bariot.backend.controller.RoomResource.ROOM_MAPPING;
 @RestController
 public class DeviceResource {
 
-    private static final String DEV_BASIC_URL = "/dev";
+    private static final String DEV_BASIC_URL = ROOM_MAPPING + "/devices";
     private static final String DEV_ID = "/{idDev:[\\d]+}";
 
-    public static final String DEV_MAPPING = ROOM_MAPPING + DEV_BASIC_URL + DEV_ID;
+    public static final String DEV_MAPPING = DEV_BASIC_URL + DEV_ID;
 
     private GeneralLayeredResponse<RoomModel> generalResponse;
 
@@ -44,7 +44,7 @@ public class DeviceResource {
         return generalResponse.getAllItems(id, idHome, idRoom);
     }
 
-    @GetMapping(DEV_BASIC_URL + DEV_ID)
+    @GetMapping(DEV_MAPPING)
     public ResponseEntity getDeviceByID(
             @PathVariable("id") Long id,
             @PathVariable("idHome") Long idHome,
@@ -64,7 +64,7 @@ public class DeviceResource {
         return generalResponse.createFromJSON(deviceJSON, id, idHome, idRoom);
     }
 
-    @PutMapping(DEV_BASIC_URL + DEV_ID)
+    @PutMapping(DEV_MAPPING)
     public ResponseEntity updateDevice(
             @PathVariable("id") Long id,
             @PathVariable("idHome") Long idHome,
@@ -75,7 +75,7 @@ public class DeviceResource {
         return generalResponse.create(device, id, idHome, idRoom, idDev);
     }
 
-    @PatchMapping(DEV_BASIC_URL + DEV_ID)
+    @PatchMapping(DEV_MAPPING)
     public ResponseEntity updateDeviceItems(
             @PathVariable("id") Long id,
             @PathVariable("idHome") Long idHome,
@@ -87,7 +87,7 @@ public class DeviceResource {
 
     }
 
-    @DeleteMapping(DEV_BASIC_URL + DEV_ID)
+    @DeleteMapping(DEV_MAPPING)
     public ResponseEntity deleteDevice(
             @PathVariable("id") Long id,
             @PathVariable("idHome") Long idHome,

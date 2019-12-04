@@ -12,17 +12,26 @@ public class Home {
     long id;
     String name;
     String brokerUrl;
-
 }
 
 public class Room {
     long id;
     String name;
-    Home home;
 }
 
 public class Device {
     long id;
     String name;
-    Room room;
+    DeviceType type; // enum
+}
+
+public enum DeviceType {
+    NONE,
+    TEMPERATURE,
+    HUMIDITY,
+    LIGHT,
+    RELAY,
+    SWITCH,
+    PIR,
+    GAS
 }

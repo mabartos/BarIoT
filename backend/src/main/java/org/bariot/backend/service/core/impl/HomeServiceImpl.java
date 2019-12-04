@@ -28,6 +28,21 @@ public class HomeServiceImpl extends CRUDServiceSubItemsImpl<HomeModel, RoomMode
     }
 
     @Override
+    public boolean deleteByID(long id) {
+        try {
+            HomeModel home = getByID(id);
+            if (home == null)
+                return false;
+            home.getAllUsers().forEach(f -> f.removeFromHome(id));
+            getRepository().deleteById(id);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
     public boolean setRoleForUser(Long homeID, UserModel user, UserRole role) {
         HomeModel found = getByID(homeID);
         if (found != null) {

@@ -6,7 +6,10 @@ import org.bariot.backend.general.DedicatedUserRole;
 import org.bariot.backend.general.UserRole;
 import org.bariot.backend.utils.IBasicInfo;
 import org.bariot.backend.utils.IsUnique;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -44,7 +47,7 @@ public class HomeModel implements Serializable, IBasicInfo<RoomModel> {
     @Column(name = "BROKER")
     private String brokerUrl;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "HOMES_USERS",
             joinColumns = {
                     @JoinColumn(name = "HOME_ID", referencedColumnName = "HOME_ID")},
@@ -54,6 +57,7 @@ public class HomeModel implements Serializable, IBasicInfo<RoomModel> {
     private List<UserModel> usersList=new ArrayList<>();
 
     @OneToMany(targetEntity = RoomModel.class, mappedBy = "home")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<RoomModel> roomsList;
 
     @ElementCollection
@@ -71,10 +75,19 @@ public class HomeModel implements Serializable, IBasicInfo<RoomModel> {
         this.brokerUrl = brokerUrl;
     }
 
+    public void removeHomeFromUser(long userID) {
+        Optional<UserModel> opt = usersList.stream().filter(f -> f.getID() == userID).findAny();
+        opt.ifPresent(userModel -> userModel.getAllSubs().removeIf(f -> f.getID() == this.getID()));
+    }
+
+    @JsonIgnore
     public List<RoomModel> getRoomsList() {
         return roomsList;
     }
 
+    public void removeUserList() {
+        usersList = null;
+    }
     @Override
     public long getID() {
         return this.id;
@@ -94,6 +107,7 @@ public class HomeModel implements Serializable, IBasicInfo<RoomModel> {
         return this.name;
     }
 
+    @JsonIgnore
     public Set<DedicatedUserRole> getAllUserRoles() {
         return userRoles;
     }
@@ -133,6 +147,7 @@ public class HomeModel implements Serializable, IBasicInfo<RoomModel> {
         return false;
     }
 
+    @JsonIgnore
     public List<UserModel> getAllUsers() {
         return usersList;
     }

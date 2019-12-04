@@ -2,9 +2,11 @@ package org.bariot.backend.persistence.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import org.bariot.backend.utils.IBasicInfo;
 import org.bariot.backend.utils.IsUnique;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,6 +22,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Entity
 @Table(name = "USERS")
@@ -48,7 +51,7 @@ public class UserModel implements Serializable, IBasicInfo<HomeModel> {
     @Email
     private String email;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "USERS_HOMES",
             joinColumns = {
                     @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")},
@@ -105,6 +108,11 @@ public class UserModel implements Serializable, IBasicInfo<HomeModel> {
         return 0;
     }
 
+    public void removeFromHome(long homeID) {
+        Optional<HomeModel> opt = homesList.stream().filter(f -> f.getID() == homeID).findAny();
+        opt.ifPresent(homeModel -> homeModel.getAllUsers().removeIf(f -> f.getID() == this.getID()));
+    }
+
     @Override
     @JsonIgnore
     public List<HomeModel> getAllSubs() {
@@ -145,6 +153,7 @@ public class UserModel implements Serializable, IBasicInfo<HomeModel> {
         return password;
     }
 
+    @JsonSetter("password")
     public void setPassword(String password) {
         this.password = password;
     }

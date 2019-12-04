@@ -5,9 +5,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.bariot.backend.utils.IBasicInfo;
 import org.bariot.backend.utils.IsUnique;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -15,6 +18,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,13 +40,15 @@ public class RoomModel implements Serializable, IBasicInfo<DeviceModel> {
     private HomeModel home;
 
     @OneToMany(targetEntity = DeviceModel.class, mappedBy = "room")
-    private List<DeviceModel> listDevices;
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<DeviceModel> listDevices = new ArrayList<>();
 
     public RoomModel() {
     }
 
-    public RoomModel(String name) {
+    public RoomModel(String name, HomeModel home) {
         this.name = name;
+        this.home = home;
     }
 
     @JsonGetter("home")

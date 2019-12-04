@@ -45,6 +45,7 @@ public class UserResource {
 
     @PostMapping()
     public ResponseEntity createUser(@RequestBody UserModel user) {
+        System.out.println(user.getPassword());
         return helper.create(user);
     }
 
