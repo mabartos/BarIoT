@@ -27,7 +27,6 @@ public class SecurityUserServiceImpl implements SecurityUserService {
         this.userDetailsService = userDetailsService;
     }
 
-
     @Override
     public void autoLogin(String username, String password) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);

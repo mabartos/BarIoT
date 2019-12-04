@@ -1,11 +1,15 @@
 package org.bariot.backend.persistence.model;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import org.bariot.backend.general.DeviceType;
 import org.bariot.backend.utils.Identifiable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -30,11 +34,38 @@ public class DeviceModel implements Serializable, Identifiable {
     @JoinColumn(name = "ROOM_ID")
     private RoomModel room;
 
+    @Column
+    @Enumerated
+    private DeviceType deviceType = DeviceType.NONE;
+
     public DeviceModel() {
     }
 
-    public DeviceModel(String name) {
+    public DeviceModel(String name, DeviceType deviceType) {
         this.name = name;
+        this.deviceType = deviceType;
+    }
+
+    public DeviceType getDeviceType() {
+        return deviceType;
+    }
+
+    public void setDeviceType(DeviceType deviceType) {
+        this.deviceType = deviceType;
+    }
+
+    @JsonSetter("deviceType")
+    public void setDeviceTypeByID(Integer deviceType) {
+        if (deviceType != null) {
+            this.deviceType = DeviceType.values()[deviceType];
+            return;
+        }
+        this.deviceType = DeviceType.NONE;
+    }
+
+    @JsonGetter("deviceType")
+    public Integer getDeviceTypeID() {
+        return deviceType.ordinal();
     }
 
     @Override

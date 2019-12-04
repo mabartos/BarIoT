@@ -10,9 +10,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.ws.rs.QueryParam;
 
 
 @RestController
@@ -29,7 +28,7 @@ public class AuthResource {
     }
 
     @GetMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity login(@QueryParam("username") String username, @QueryParam("password") String password) {
+    public ResponseEntity login(@RequestParam("username") String username, @RequestParam("password") String password) {
         if (username == null || password == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid credentials");
         securityUserService.autoLogin(username, password);
@@ -43,10 +42,10 @@ public class AuthResource {
 
     @GetMapping("/register")
     public ResponseEntity register(
-            @QueryParam("username") String username,
-            @QueryParam("password") String password,
-            @QueryParam("firstname") String firstname,
-            @QueryParam("lastname") String lastname
+            @RequestParam("username") String username,
+            @RequestParam("password") String password,
+            @RequestParam("firstname") String firstname,
+            @RequestParam("lastname") String lastname
     ) {
         if (username == null || password == null || firstname == null || lastname == null)
             return ResponseEntity.badRequest().body("Missing account details!");
@@ -63,7 +62,7 @@ public class AuthResource {
     }
 
     @GetMapping("/token")
-    public ResponseEntity getToken(@QueryParam("email") String email, @QueryParam("password") String password) {
+    public ResponseEntity getToken(@RequestParam("email") String email, @RequestParam("password") String password) {
         if (email == null || password == null)
             return ResponseEntity.badRequest().body("Missing credentials!");
         return ResponseEntity.ok(securityUserService.getBasicToken(email, password));

@@ -33,18 +33,18 @@ public class UserModel implements Serializable, IBasicInfo<HomeModel> {
     private long id;
 
     @Column(name = "USER_NAME", nullable = false, unique = true)
-    private String userName;
+    private String username;
 
     @Column(name = "PASSWORD", nullable = false)
     private String password;
 
     @Column(name = "FIRST_NAME")
-    private String firstName;
+    private String firstname;
 
     @Column(name = "LAST_NAME")
-    private String lastName;
+    private String lastname;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "EMAIL", unique = true)
     @Email
     private String email;
 
@@ -61,16 +61,16 @@ public class UserModel implements Serializable, IBasicInfo<HomeModel> {
     }
 
     public UserModel(String username, String password) {
-        this.userName = username;
+        this.username = username;
         this.password = password;
-        this.firstName = null;
-        this.lastName = null;
+        this.firstname = null;
+        this.lastname = null;
     }
 
-    public UserModel(String username, String password, String firstName, String lastName) {
+    public UserModel(String username, String password, String firstname, String lastname) {
         this(username, password);
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.firstname = firstname;
+        this.lastname = lastname;
     }
 
     @Override
@@ -115,30 +115,32 @@ public class UserModel implements Serializable, IBasicInfo<HomeModel> {
         return this.email;
     }
 
+
     public String getUsername() {
-        return userName;
+        return username;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getLastname() {
+        return lastname;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     public void setUserName(String name){
-        this.userName=name;
+        this.username = name;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
@@ -157,16 +159,17 @@ public class UserModel implements Serializable, IBasicInfo<HomeModel> {
             UserModel object = (UserModel) obj;
             return (object.getID() == this.getID()
                     && object.getName().equals(this.getName())
-                    && object.getCountOfSub() == this.getCountOfSub()
-                    && object.getFirstName().equals(this.getFirstName())
-                    && object.getLastName().equals(this.getLastName())
+                    && object.getCountOfSub().equals(this.getCountOfSub())
+                    && object.getFirstname().equals(this.getFirstname())
+                    && object.getLastname().equals(this.getLastname())
+                    && object.getEmail().equals(this.getEmail())
             );
         }
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userName, firstName, lastName);
+        return Objects.hash(id, username, firstname, lastname, email);
     }
 }
 

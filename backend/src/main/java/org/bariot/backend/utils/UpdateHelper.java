@@ -75,11 +75,15 @@ public class UpdateHelper<Model extends Identifiable> {
     private Model updateUser(Model model, Map<String, String> updates) {
         UserModel res = (UserModel) model;
         updates.forEach((key, val) -> {
-                    if (key.equals("firstName")) {
-                        res.setFirstName(val);
-                    } else if (key.equals("lastName")) {
-                        res.setLastName(val);
-                    }
+            switch (key) {
+                case "firstname":
+                    res.setFirstname(val);
+                    break;
+                case "lastname":
+                    res.setLastname(val);
+                    break;
+
+            }
                 }
         );
         return (Model) res;
@@ -91,13 +95,15 @@ public class UpdateHelper<Model extends Identifiable> {
     private Model updateHome(Model model, Map<String, String> updates) {
         HomeModel res = (HomeModel) model;
         updates.forEach((key, val) -> {
-                    if (key.equals("name")) {
-                        res.setName(val);
-                    } else if (key.equals("brokerUrl")) {
-                        res.setBrokerUrl(val);
-                    }
-                }
-        );
+            switch (key) {
+                case "name":
+                    res.setName(val);
+                    break;
+                case "brokerUrl":
+                    res.setBrokerUrl(val);
+                    break;
+            }
+        });
         return (Model) res;
     }
 
@@ -107,9 +113,12 @@ public class UpdateHelper<Model extends Identifiable> {
     private Model updateRoom(Model model, Map<String, String> updates, Long parentID) {
         RoomModel res = (RoomModel) model;
         updates.forEach((key, val) -> {
-            if (key.equals("name")) {
-                res.setName(val);
+            switch (key) {
+                case "name":
+                    res.setName(val);
+                    break;
             }
+
             if (parentID != null) {
                 res.setHome((HomeModel) getByID(parentID.toString(), (CRUDService<Model>) homeService));
             }
@@ -124,8 +133,10 @@ public class UpdateHelper<Model extends Identifiable> {
     private Model updateDevice(Model model, Map<String, String> updates, Long parentID) {
         DeviceModel res = (DeviceModel) model;
         updates.forEach((key, val) -> {
-            if (key.equals("name")) {
-                res.setName(val);
+            switch (key) {
+                case "name":
+                    res.setName(val);
+                    break;
             }
             if (parentID != null) {
                 res.setRoom((RoomModel) getByID(parentID.toString(), (CRUDService<Model>) roomService));
