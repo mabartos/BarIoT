@@ -1,17 +1,22 @@
 package org.bariot.backend.utils.responseHelper;
 
+import org.bariot.backend.general.DedicatedUserRole;
 import org.bariot.backend.persistence.model.HomeModel;
+import org.bariot.backend.service.core.HomeService;
 import org.bariot.backend.service.core.UserHomeService;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Set;
 
 public class UserHomeResponseHelper {
 
     private UserHomeService userHomeService;
+    private HomeService homeService;
 
-    public UserHomeResponseHelper(UserHomeService userHomeService) {
+    public UserHomeResponseHelper(UserHomeService userHomeService, HomeService homeService) {
         this.userHomeService = userHomeService;
+        this.homeService = homeService;
     }
 
     public ResponseEntity getUsersHomes(Long id) {
@@ -67,5 +72,30 @@ public class UserHomeResponseHelper {
             return ResponseEntity.ok(result);
         }
         return ResponseEntity.badRequest().body("Cannot update home for user");
+    }
+
+    public ResponseEntity getRolesFromHome(Long userID, Long homeID) {
+        Set<DedicatedUserRole> roles = userHomeService.getRolesFromHome(userID, homeID);
+        if (roles != null)
+            return ResponseEntity.ok(roles);
+        return ResponseEntity.badRequest().body("Cannot get all roles in home");
+    }
+
+    public ResponseEntity updateUserRoleInHome(Long userID, Long homeID, DedicatedUserRole dedicatedUserRole) {
+        if (userHomeService.updateRoleForUser(userID, homeID, dedicatedUserRole.getUser(), dedicatedUserRole.getRole()))
+            return ResponseEntity.ok().build();
+        return ResponseEntity.badRequest().body("Cannot update roles in home");
+    }
+
+    public ResponseEntity setUserRoleInHome(Long userID, Long homeID, DedicatedUserRole dedicatedUserRole) {
+        if (userHomeService.setRoleForUser(userID, homeID, dedicatedUserRole.getUser(), dedicatedUserRole.getRole()))
+            return ResponseEntity.ok().build();
+        return ResponseEntity.badRequest().body("Cannot set roles in home");
+    }
+
+    public ResponseEntity removeUserRoleInHome(Long userID, Long homeID, DedicatedUserRole dedicatedUserRole) {
+        if (userHomeService.removeRoleForUser(userID, homeID, dedicatedUserRole.getUser(), dedicatedUserRole.getRole()))
+            return ResponseEntity.ok().build();
+        return ResponseEntity.badRequest().body("Cannot remove roles in home");
     }
 }

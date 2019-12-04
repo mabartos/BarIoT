@@ -1,12 +1,9 @@
 package org.bariot.backend.controller;
 
+import org.bariot.backend.general.DedicatedUserRole;
 import org.bariot.backend.persistence.model.HomeModel;
-import org.bariot.backend.persistence.model.UserModel;
-import org.bariot.backend.service.core.CRUDService;
-import org.bariot.backend.service.core.CRUDServiceSubItems;
 import org.bariot.backend.service.core.HomeService;
-import org.bariot.backend.service.core.UserService;
-import org.bariot.backend.utils.responseHelper.ResponseHelperWithSub;
+import org.bariot.backend.utils.responseHelper.HomeResponseHelper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,14 +20,14 @@ import javax.transaction.Transactional;
 @Transactional
 @RestController
 @RequestMapping("/homes")
-@SuppressWarnings("unchecked")
 public class HomeResource {
     private static final String HOME_ID = "/{idHome:[\\d]+}";
+    private static final String HOME_ID_ROLES = "/{idHome:[\\d]+}/roles";
 
-    private ResponseHelperWithSub<HomeModel, UserModel> helper;
+    private HomeResponseHelper helper;
 
-    public HomeResource(HomeService homeService, UserService userService) {
-        this.helper = new ResponseHelperWithSub(homeService, userService);
+    public HomeResource(HomeService homeService) {
+        this.helper = new HomeResponseHelper(homeService);
     }
 
     @PostMapping()
@@ -39,7 +36,7 @@ public class HomeResource {
     }
 
     @PutMapping(HOME_ID)
-    public ResponseEntity updateUser(@PathVariable("idHome") Long id, @RequestBody HomeModel home) {
+    public ResponseEntity updateHome(@PathVariable("idHome") Long id, @RequestBody HomeModel home) {
         return helper.update(id, home);
     }
 
@@ -62,4 +59,25 @@ public class HomeResource {
     public ResponseEntity deleteHome(@PathVariable("idHome") Long id) {
         return helper.deleteByID(id);
     }
+
+    @GetMapping(HOME_ID_ROLES)
+    public ResponseEntity getAllUserRolesInHome(@PathVariable("idHome") Long id) {
+        return helper.getRolesFromHome(id);
+    }
+
+    @PatchMapping(HOME_ID_ROLES)
+    public ResponseEntity updateUserRoleInHome(@PathVariable("idHome") Long id, @RequestBody DedicatedUserRole dedicatedUserRole) {
+        return helper.updateUserRoleInHome(id, dedicatedUserRole);
+    }
+
+    @PostMapping(HOME_ID_ROLES)
+    public ResponseEntity setUserRoleInHome(@PathVariable("idHome") Long id, @RequestBody DedicatedUserRole dedicatedUserRole) {
+        return helper.setUserRoleInHome(id, dedicatedUserRole);
+    }
+
+    @DeleteMapping(HOME_ID_ROLES)
+    public ResponseEntity removeUserRoleInHome(@PathVariable("idHome") Long id, @RequestBody DedicatedUserRole dedicatedUserRole) {
+        return helper.removeUserRoleInHome(id, dedicatedUserRole);
+    }
+
 }

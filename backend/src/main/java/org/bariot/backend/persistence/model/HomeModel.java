@@ -2,10 +2,13 @@ package org.bariot.backend.persistence.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.bariot.backend.general.DedicatedUserRole;
+import org.bariot.backend.general.UserRole;
 import org.bariot.backend.utils.IBasicInfo;
 import org.bariot.backend.utils.IsUnique;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -18,8 +21,11 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 @Entity
 @Table(name = "HOMES")
@@ -49,6 +55,9 @@ public class HomeModel implements Serializable, IBasicInfo<RoomModel> {
 
     @OneToMany(targetEntity = RoomModel.class, mappedBy = "home")
     private List<RoomModel> roomsList;
+
+    @ElementCollection
+    private Set<DedicatedUserRole> userRoles = new HashSet<>();
 
     public HomeModel() {
     }
@@ -85,6 +94,35 @@ public class HomeModel implements Serializable, IBasicInfo<RoomModel> {
         return this.name;
     }
 
+    public Set<DedicatedUserRole> getAllUserRoles() {
+        return userRoles;
+    }
+
+    public boolean setRoleForUser(UserModel user, UserRole role) {
+        if (user != null && role != null && IsUnique.itemAlreadyInList(usersList, user)) {
+            return userRoles.add(new DedicatedUserRole(user, role));
+        }
+        return false;
+    }
+
+    public boolean updateRoleForUser(UserModel user, UserRole role) {
+        if (user != null && role != null && IsUnique.itemAlreadyInList(usersList, user) && userRoles.contains(user)) {
+            Optional opt = userRoles.stream().filter(f -> f.getUser().equals(user)).findFirst();
+            if (opt.isPresent()) {
+                DedicatedUserRole userRole = (DedicatedUserRole) opt.get();
+                userRole.setRole(role);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean removeRoleForUser(UserModel user, UserRole role) {
+        if (user != null && role != null && IsUnique.itemAlreadyInList(usersList, user) && userRoles.contains(user)) {
+            return userRoles.remove(user);
+        }
+        return false;
+    }
 
     public boolean addToUsers(UserModel item) {
         if (item != null) {

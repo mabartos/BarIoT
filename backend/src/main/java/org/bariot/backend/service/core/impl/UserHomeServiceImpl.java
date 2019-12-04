@@ -1,15 +1,18 @@
 package org.bariot.backend.service.core.impl;
 
+import org.bariot.backend.general.DedicatedUserRole;
+import org.bariot.backend.general.UserRole;
 import org.bariot.backend.persistence.model.HomeModel;
 import org.bariot.backend.persistence.model.UserModel;
-import org.bariot.backend.service.core.UserHomeService;
 import org.bariot.backend.service.core.HomeService;
+import org.bariot.backend.service.core.UserHomeService;
 import org.bariot.backend.service.core.UserService;
 import org.bariot.backend.utils.UserPathHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserHomeServiceImpl implements UserHomeService {
@@ -38,6 +41,7 @@ public class UserHomeServiceImpl implements UserHomeService {
         HomeModel created = homeService.create(home);
         if (user != null && created != null) {
             user.addToSubSet(created);
+            created.addToUsers(user);
             return created;
         }
         return null;
@@ -49,6 +53,7 @@ public class UserHomeServiceImpl implements UserHomeService {
         HomeModel home = homeService.getByID(idHome);
         if (user != null && home != null) {
             user.addToSubSet(home);
+            home.addToUsers(user);
             return home;
         }
         return null;
@@ -95,5 +100,48 @@ public class UserHomeServiceImpl implements UserHomeService {
                 return updated;
         }
         return null;
+    }
+
+    @Override
+    public Set<DedicatedUserRole> getRolesFromHome(Long userID, Long homeID) {
+        UserModel userModel = userPath.getPath(userID);
+        HomeModel homeModel = homeService.getByID(homeID);
+        if (userModel != null && homeModel != null && userModel.getAllSubs().contains(homeModel)) {
+            return homeService.getRolesFromHome(homeID);
+        }
+        return null;
+    }
+
+    @Override
+    public boolean setRoleForUser(Long userID, Long homeID, UserModel user, UserRole role) {
+        UserModel userModel = userPath.getPath(userID);
+        HomeModel homeModel = homeService.getByID(homeID);
+        if (userModel != null && homeModel != null && user != null
+                && userModel.getAllSubs().contains(homeModel)) {
+            return homeService.setRoleForUser(homeID, userModel, role);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean updateRoleForUser(Long userID, Long homeID, UserModel user, UserRole role) {
+        UserModel userModel = userPath.getPath(userID);
+        HomeModel homeModel = homeService.getByID(homeID);
+        if (userModel != null && homeModel != null && user != null
+                && userModel.getAllSubs().contains(homeModel)) {
+            return homeService.updateRoleForUser(homeID, user, role);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean removeRoleForUser(Long userID, Long homeID, UserModel user, UserRole role) {
+        UserModel userModel = userPath.getPath(userID);
+        HomeModel homeModel = homeService.getByID(homeID);
+        if (userModel != null && homeModel != null && user != null
+                && userModel.getAllSubs().contains(homeModel)) {
+            return homeService.removeRoleForUser(homeID, userModel, role);
+        }
+        return false;
     }
 }
