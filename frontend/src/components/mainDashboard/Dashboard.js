@@ -241,10 +241,10 @@ export default function Dashboard() {
               <div>
                 <Container maxWidth="lg" className={classes.container}>
                   <Grid container spacing={3}>
-                    <GeneralTile name={"Home_1"} imageName="flat" type="home" link="/dashboard/Home_1"/>
-                    <GeneralTile name={"Home_2"} imageName="camper_van" type="home"/>
-                    <GeneralTile name={"Home_3"} imageName="other" type="home"/>
-                    <GeneralTile name={"Home_4"} imageName="house" type="home"/>
+                    <GeneralTile name={"Home_1"} imageName="flat.jpg" type="home" link="/dashboard/Home_1"/>
+                    <GeneralTile name={"Home_2"} imageName="camper_van.jpg" type="home"/>
+                    <GeneralTile name={"Home_3"} imageName="other.jpg" type="home"/>
+                    <GeneralTile name={"Home_4"} imageName="house.jpg" type="home"/>
                     <AddTile name={"Home"}/>
                   </Grid>
                 </Container>
@@ -254,12 +254,14 @@ export default function Dashboard() {
             <div>
               <Container maxWidth="lg" className={classes.container}>
                 <Grid container spacing={3}>
-                  <GeneralTile name={"Room_1"} imageName="kitchen" type="room" link="/dashboard/Home_1_Room_1"/>
-                  <GeneralTile name={"Room_1"} imageName="garage" type="room"/>
-                  <GeneralTile name={"Room_2"} imageName="room" type="room"/>
-                  <GeneralTile name={"Room_3"} imageName="bathroom" type="room"/>
-                  <GeneralTile name={"Room_4"} imageName="other" type="room"/>
-                  <GeneralTile name={"Room_4"} imageName="livingroom" type="room"/>
+                  <GeneralTile name={"Kitchen"} imageName="kitchen.png" type="room" link="/dashboard/Home_1_Room_1"/>
+                  <GeneralTile name={"Living room"} imageName="living.png" type="room"/>
+                  <GeneralTile name={"Bedroom"} imageName="bedroom.png" type="room"/>
+                  <GeneralTile name={"Room 1"} imageName="room.jpg" type="room"/>
+                  <GeneralTile name={"Bathroom"} imageName="bathroom.png" type="room"/>
+                  <GeneralTile name={"Room_4"} imageName="other.jpg" type="room"/>
+                  <GeneralTile name={"Garage"} imageName="garage.jpg" type="room"/>
+
                   <AddTile name={"Room"}/>
                 </Grid>
               </Container>
@@ -275,13 +277,13 @@ export default function Dashboard() {
             <div>
               <Container maxWidth="lg" className={classes.container}>
                 <Grid container spacing={3}>
-                  <GeneralTile name={"Temp"} imageName="livingroom" type="device" devtype="temp"/>
-                  <GeneralTile name={"Humidity"} imageName="livingroom" type="device" devtype="hum"/>
-                  <GeneralTile name={"Light"} imageName="livingroom" type="device" devtype="light"/>
-                  <GeneralTile name={"Socket"} imageName="livingroom" type="device" devtype="socket"/>
-                  <GeneralTile name={"Air Conditioner"} imageName="livingroom" type="device" devtype="ac"/>
-                  <GeneralTile name={"Heater"} imageName="livingroom" type="device" devtype="heater"/>
-                  <GeneralTile name={"Power Stats"} imageName="livingroom" type="device" devtype="stats"/>
+                  <GeneralTile name={"Temp"} imageName="livingroom.jpg" type="device" devtype="temp"/>
+                  <GeneralTile name={"Humidity"} imageName="livingroom.jpg" type="device" devtype="hum"/>
+                  <GeneralTile name={"Light"} imageName="livingroom.jpg" type="device" devtype="light"/>
+                  <GeneralTile name={"Socket"} imageName="livingroom.jpg" type="device" devtype="socket"/>
+                  <GeneralTile name={"Air Conditioner"} imageName="livingroom.jpg" type="device" devtype="ac"/>
+                  <GeneralTile name={"Heater"} imageName="livingroom.jpg" type="device" devtype="heater"/>
+                  <GeneralTile name={"Power Stats"} imageName="livingroom.jpg" type="device" devtype="stats"/>
                   <AddTile name={"Device"}/>
                 </Grid>
               </Container>

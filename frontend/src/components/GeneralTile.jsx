@@ -161,7 +161,7 @@ export default function GeneralTile(props) {
     const value = 30;
     const progbarval= value -16;
     const humidity = 66;
-    var bg=require(`../assets/${props.imageName}.jpg`)
+    var bg=require(`../assets/${props.imageName}`)
     return (
         <Grid item xs={12} md={4} spacing={2}>
             <Card button className={classes.card} >
@@ -300,7 +300,11 @@ export default function GeneralTile(props) {
                         <CardMedia
                           component={Link} to={props.link}
                           className={classes.media}
-                          style={{backgroundImage:`url(${bg})`}}
+                          style={{backgroundImage:`url(${bg})`,
+                          backgroundPosition: "center",
+                          backgroundRepeat: "no-repeat",
+                          backgroundSize: "cover",
+                        height:"100px"}}
                           onClick={click}
                         />
                       )

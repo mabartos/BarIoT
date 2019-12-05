@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,6 +12,7 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import BackgroundImage from '../../assets/smart.jpg'
+import {withRouter} from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 
 function Copyright() {
@@ -60,6 +61,18 @@ const useStyles = makeStyles(theme => ({
 
 export default function SignInSide() {
   const classes = useStyles();
+  
+
+  const [username,setUsername]=useState('');
+  const [password,setPassword]=useState('');
+
+  //TODO just for testing
+  const verifyLogin=()=>{
+    if(username==="user123" && password==="user123"){
+    }else
+    console.log("FAILED");
+  }
+
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -79,10 +92,11 @@ export default function SignInSide() {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="username"
+              label="Username"
+              name="username"
+              onChange={(e) => setUsername(e.target.value)}
+              autoComplete="username"
               autoFocus
             />
             <TextField
@@ -94,6 +108,7 @@ export default function SignInSide() {
               label="Password"
               type="password"
               id="password"
+              onChange={(e) => setPassword(e.target.value)}
               autoComplete="current-password"
             />
             <FormControlLabel
@@ -107,6 +122,7 @@ export default function SignInSide() {
               color="primary"
               className={classes.submit}
               href="/dashboard"
+              onClick={verifyLogin}
             >
               Sign In
             </Button>
