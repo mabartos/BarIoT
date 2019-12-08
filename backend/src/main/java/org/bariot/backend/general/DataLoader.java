@@ -104,11 +104,6 @@ public class DataLoader implements ApplicationRunner {
 
         roomService.addToSubSet(home2room3.getID(), home2room3device3);
 
-        homeService.update(home1.getID(), home1);
-        homeService.update(home2.getID(), home2);
-        homeService.update(home3.getID(), home3);
-        homeService.update(home4.getID(), home4);
-
         deviceService.update(home1room1device1.getID(), home1room1device1);
         deviceService.update(home1room1device2.getID(), home1room1device2);
         deviceService.update(home1room2device1.getID(), home1room2device1);

@@ -15,12 +15,8 @@ import java.util.Set;
 @Service
 public class BarIOTUserDetailsService implements UserDetailsService {
 
-    private UserService userService;
-
     @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
+    private UserService userService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

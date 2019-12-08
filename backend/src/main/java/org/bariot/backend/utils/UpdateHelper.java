@@ -6,10 +6,11 @@ import org.bariot.backend.persistence.model.HomeModel;
 import org.bariot.backend.persistence.model.RoomModel;
 import org.bariot.backend.persistence.model.UserModel;
 import org.bariot.backend.service.core.CRUDService;
-import org.bariot.backend.service.core.DeviceService;
 import org.bariot.backend.service.core.HomeService;
 import org.bariot.backend.service.core.RoomService;
 import org.bariot.backend.service.core.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -22,14 +23,12 @@ public class UpdateHelper<Model extends Identifiable> {
     private UserService userService;
     private HomeService homeService;
     private RoomService roomService;
-    private DeviceService deviceService;
 
-
-    public void setDependency(UserService userService, HomeService homeService, RoomService roomService, DeviceService deviceService) {
+    @Autowired
+    public void setDependency(@Lazy UserService userService,@Lazy HomeService homeService,@Lazy RoomService roomService) {
         this.userService = userService;
         this.homeService = homeService;
         this.roomService = roomService;
-        this.deviceService = deviceService;
     }
 
     public Model updateItems(Model model, String updatesJSON) {
@@ -101,6 +100,9 @@ public class UpdateHelper<Model extends Identifiable> {
                     break;
                 case "brokerUrl":
                     res.setBrokerUrl(val);
+                    break;
+                case "image":
+                    res.setImage(val);
                     break;
             }
         });
