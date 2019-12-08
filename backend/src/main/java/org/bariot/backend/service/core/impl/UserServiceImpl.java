@@ -7,6 +7,7 @@ import org.bariot.backend.service.core.UserService;
 import org.bariot.backend.utils.IsUnique;
 import org.bariot.backend.utils.UpdateHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

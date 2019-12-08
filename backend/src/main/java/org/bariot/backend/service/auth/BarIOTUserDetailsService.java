@@ -3,6 +3,7 @@ package org.bariot.backend.service.auth;
 import org.bariot.backend.persistence.model.UserModel;
 import org.bariot.backend.service.core.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,8 +16,12 @@ import java.util.Set;
 @Service
 public class BarIOTUserDetailsService implements UserDetailsService {
 
-    @Autowired
     private UserService userService;
+
+    @Autowired
+    public void setDependency(@Lazy UserService userService){
+        this.userService=userService;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

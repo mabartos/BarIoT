@@ -1,6 +1,7 @@
 package org.bariot.backend.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.bariot.backend.general.RoomType;
 import org.bariot.backend.persistence.model.DeviceModel;
 import org.bariot.backend.persistence.model.HomeModel;
 import org.bariot.backend.persistence.model.RoomModel;
@@ -25,7 +26,7 @@ public class UpdateHelper<Model extends Identifiable> {
     private RoomService roomService;
 
     @Autowired
-    public void setDependency(@Lazy UserService userService,@Lazy HomeService homeService,@Lazy RoomService roomService) {
+    public void setDependency(@Lazy UserService userService, HomeService homeService, RoomService roomService) {
         this.userService = userService;
         this.homeService = homeService;
         this.roomService = roomService;
@@ -118,6 +119,11 @@ public class UpdateHelper<Model extends Identifiable> {
             switch (key) {
                 case "name":
                     res.setName(val);
+                    break;
+                case "type":
+                    res.setType(RoomType.values()[Integer.parseInt(val)]);
+                case "image":
+                    res.setImage(val);
                     break;
             }
 
