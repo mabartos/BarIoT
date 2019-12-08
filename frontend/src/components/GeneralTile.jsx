@@ -32,6 +32,7 @@ import TileSocket from './TileSocket'
 import TileAC from './TileAC'
 import TileHeater from './TileHeater'
 import TileStats from './TileStats'
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
 
@@ -42,6 +43,7 @@ const useStyles = makeStyles(theme => ({
         height: 240,
     },
     card: {
+        minWidth: 290,
         maxWidth: 345,
         background: 'rgba(26,41,128,0.7)',
         color: 'white',
@@ -72,7 +74,7 @@ const useStyles = makeStyles(theme => ({
 const variantIcon = {
     success: CheckCircleIcon
   };
-  
+
   const useStyles1 = makeStyles(theme => ({
     success: {
       backgroundColor: green[600],
@@ -103,7 +105,7 @@ function MySnackbarContentWrapper(props) {
     const classes = useStyles1();
     const { className, message, onClose, variant, ...other } = props;
     const Icon = variantIcon[variant];
-    
+
     return (
       <SnackbarContent
         className={clsx(classes[variant], className)}
@@ -123,7 +125,7 @@ function MySnackbarContentWrapper(props) {
       />
     );
   }
-  
+
   MySnackbarContentWrapper.propTypes = {
     className: PropTypes.string,
     message: PropTypes.string,
@@ -138,6 +140,10 @@ export default function GeneralTile(props) {
     const handleClick = () => {
         setOpen(true);
         dial_setOpen(false);
+        //delete the object
+        axios.delete(props.url).then(response => {
+            props.refresh();
+        });
     };
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -149,11 +155,11 @@ export default function GeneralTile(props) {
     const handleClickOpen = () => {
         dial_setOpen(true);
       };
-    
+
       const handleClickClose = () => {
         dial_setOpen(false);
       };
-    
+
 
     const click=(e)=>{
        //TODO redirect ??
@@ -229,71 +235,71 @@ export default function GeneralTile(props) {
                     if(props.type === 'device'){
                       switch(props.devtype){
                         case 'temperature':
-                        case 'humidity' : 
+                        case 'humidity' :
                           return(
                             <ProgressBar type={props.devtype}/>
                          )
-                        case 'light': 
+                        case 'light':
                           return(
                             <div>
-                              <CardMedia 
+                              <CardMedia
                                 className={classes.root}
-                                style={{background:'white'}}                   
+                                style={{background:'white'}}
                               >
                                 <TileLight/>
                               </CardMedia>
                             </div>
-                            
-                            
+
+
                           )
                         case 'socket':
                           return(
                             <div>
-                              <CardMedia 
+                              <CardMedia
                                 className={classes.root}
-                                style={{background:'white'}}                   
+                                style={{background:'white'}}
                               >
                                 <TileSocket/>
                               </CardMedia>
                             </div>
                           )
-                        case 'airconditioner': 
+                        case 'airconditioner':
                           return(
                             <div>
-                              <CardMedia 
+                              <CardMedia
                                 className={classes.root}
-                                style={{background:'white'}}                   
+                                style={{background:'white'}}
                               >
                               <TileAC/>
                               </CardMedia>
                             </div>
                           )
-                        case 'heater': 
+                        case 'heater':
                           return(
                             <div>
-                              <CardMedia 
+                              <CardMedia
                                 className={classes.root}
-                                style={{background:'white'}}                   
+                                style={{background:'white'}}
                               >
                               <TileHeater/>
                               </CardMedia>
                             </div>
                           )
-                        case 'stats': 
+                        case 'stats':
                           return(
                             <div>
-                              <CardMedia 
+                              <CardMedia
                                 className={classes.root}
-                                style={{background:'white'}}                   
+                                style={{background:'white'}}
                               >
                               <TileStats/>
                               </CardMedia>
                             </div>
                           )
-                            
+
                       }
-                      
-                        
+
+
                     }
                     else{
                       return(
@@ -308,7 +314,7 @@ export default function GeneralTile(props) {
                           onClick={click}
                         />
                       )
-                    }  
+                    }
                 })()}
             </Card>
         </Grid>

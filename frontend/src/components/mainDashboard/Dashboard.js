@@ -28,8 +28,11 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import HouseIcon from '@material-ui/icons/House';
 import Collapse from '@material-ui/core/Collapse';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import UserProfile from '../UserProfile.js'
-import MySwitch from '../MySwitch'
+import UserProfile from '../UserProfile.js';
+import MySwitch from '../MySwitch';
+import Homes from '../Homes';
+import Rooms from '../Rooms';
+import Devices from '../Devices';
 
 
 
@@ -132,13 +135,13 @@ export const useStyles = makeStyles(theme => ({
   nested: {
     paddingLeft: theme.spacing(4)
   },
-  
+
 }));
 
 
-export default function Dashboard() {
+export default function Dashboard(props) {
   const classes = useStyles();
-  
+
   const [open, setOpen] = React.useState(false);
   const [open_h, setOpen_h] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -190,9 +193,9 @@ export default function Dashboard() {
           </IconButton>
         </div>
         <Divider />
-          <ListItem 
+          <ListItem
           component={Link} to={"/dashboard"}
-          button 
+          button
           >
             <ListItemIcon>
               <DashboardIcon />
@@ -210,7 +213,7 @@ export default function Dashboard() {
         <Collapse in={open_h} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           <ListItem
-            component={Link} to={"/dashboard/Home_1"}
+            component={Link} to={"/dashboard/home/1"}
            button className={classes.nested} button
           >
             <ListItemIcon>
@@ -220,10 +223,10 @@ export default function Dashboard() {
           </ListItem>
         </List>
       </Collapse>
-      <ListItem 
+      <ListItem
           component={Link} to={"/dashboard/UserProfile"}
           button
-          
+
           >
             <ListItemIcon>
               <AccountCircleIcon />
@@ -237,60 +240,38 @@ export default function Dashboard() {
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
           <Switch>
-            <Route exact path="/dashboard" render={() => 
+            <Route exact path="/dashboard" render={() =>
               <div>
                 <Container maxWidth="lg" className={classes.container}>
                   <Grid container spacing={3}>
-                    <GeneralTile name={"Home_1"} imageName="flat.jpg" type="home" link="/dashboard/Home_1"/>
-                    <GeneralTile name={"Home_2"} imageName="camper_van.jpg" type="home"/>
-                    <GeneralTile name={"Home_3"} imageName="other.jpg" type="home"/>
-                    <GeneralTile name={"Home_4"} imageName="house.jpg" type="home"/>
-                    <AddTile name={"Home"}/>
+                  <Homes/>
                   </Grid>
                 </Container>
-              </div>} 
+              </div>}
             />
-            <Route path="/dashboard/Home_1" render={() => 
+            <Route exact path="/dashboard/home/:id" render={(props) =>
             <div>
               <Container maxWidth="lg" className={classes.container}>
                 <Grid container spacing={3}>
-                  <GeneralTile name={"Kitchen"} imageName="kitchen.png" type="room" link="/dashboard/Home_1_Room_1"/>
-                  <GeneralTile name={"Living room"} imageName="living.png" type="room"/>
-                  <GeneralTile name={"Bedroom"} imageName="bedroom.png" type="room"/>
-                  <GeneralTile name={"Room 1"} imageName="room.jpg" type="room"/>
-                  <GeneralTile name={"Bathroom"} imageName="bathroom.png" type="room"/>
-                  <GeneralTile name={"Room_4"} imageName="other.jpg" type="room"/>
-                  <GeneralTile name={"Garage"} imageName="garage.jpg" type="room"/>
-
-                  <AddTile name={"Room"}/>
+                <Rooms houseId={props.match.params.id}/>
                 </Grid>
               </Container>
             </div>} />
             <Route path="/dashboard/UserProfile">
               <UserProfile/>
             </Route>
-            <Route path="/dashboard/test" render={() => 
-              <div><MySwitch/></div>} />
-              
-            
-            <Route path="/dashboard/Home_1_Room_1">
+
+
+            <Route path="/dashboard/home/:homeId/room/:roomId" render={(props) =>
             <div>
               <Container maxWidth="lg" className={classes.container}>
                 <Grid container spacing={3}>
-                  <GeneralTile name={"Temp"} imageName="livingroom.jpg" type="device" devtype="temp"/>
-                  <GeneralTile name={"Humidity"} imageName="livingroom.jpg" type="device" devtype="hum"/>
-                  <GeneralTile name={"Light"} imageName="livingroom.jpg" type="device" devtype="light"/>
-                  <GeneralTile name={"Socket"} imageName="livingroom.jpg" type="device" devtype="socket"/>
-                  <GeneralTile name={"Air Conditioner"} imageName="livingroom.jpg" type="device" devtype="ac"/>
-                  <GeneralTile name={"Heater"} imageName="livingroom.jpg" type="device" devtype="heater"/>
-                  <GeneralTile name={"Power Stats"} imageName="livingroom.jpg" type="device" devtype="stats"/>
-                  <AddTile name={"Device"}/>
+                <Devices homeId={props.match.params.homeId} roomId={props.match.params.roomId} />
                 </Grid>
               </Container>
-            </div>
-            </Route>
+            </div>}/>
           </Switch>
-          
+
           <Copyright />
         </main>
       </div>

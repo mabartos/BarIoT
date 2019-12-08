@@ -26,8 +26,8 @@ const useStyles = makeStyles(theme => ({
       marginTop: theme.spacing(3),
     },
   }));
-  
-  
+
+
   const homes = [
     'Flat',
     'Camper van',
@@ -55,17 +55,18 @@ const useStyles = makeStyles(theme => ({
   export default function SimpleSelect(props) {
     const classes = useStyles();
     const [age, setAge] = React.useState('');
-  
+
     const inputLabel = React.useRef(null);
     const [labelWidth, setLabelWidth] = React.useState(0);
     React.useEffect(() => {
       setLabelWidth(inputLabel.current.offsetWidth);
     }, []);
-  
+
     const handleChange = event => {
       setAge(event.target.value);
+      props.selectChanged(event.target.value);
     };
-  
+
     return (
       <div>
         <FormControl variant="outlined" className={classes.formControl}>
@@ -78,32 +79,32 @@ const useStyles = makeStyles(theme => ({
             value={age}
             onChange={handleChange}
             labelWidth={labelWidth}
-            
+
           >
                   {(() => {
                     switch(props.name){
-                      case 'Home' : 
+                      case 'Home' :
                         return(homes.map(name => (
                           <MenuItem key={name} value={name}>
                             {name}
                           </MenuItem>
                         )))
-                      case 'Room' : 
+                      case 'Room' :
                         return(rooms.map(name => (
                           <MenuItem key={name} value={name}>
                             {name}
                           </MenuItem>
                         )))
-                      case 'Device' : 
+                      case 'Device' :
                         return(devices.map(name => (
                           <MenuItem key={name} value={name}>
                             {name}
                           </MenuItem>
                         )))
-                      
+
                     }
                   })()}
-          
+
           </Select>
         </FormControl>
       </div>

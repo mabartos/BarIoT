@@ -1,6 +1,6 @@
 import React from 'react';
 import Dashboard from '../components/mainDashboard/Dashboard';
-
+import axios from 'axios';
 
 class DashboardMainPage extends React.Component {
     constructor(props) {
@@ -11,25 +11,8 @@ class DashboardMainPage extends React.Component {
         }
     }
 
-    fetchHomes() {
-        fetch('http://localhost:8080/homes')
-            .then(res => res.json())
-            .then((data) => {
-                console.log(data);
-                this.setState({ homes: data })
-            }).catch(console.log)
-
-    }
-
-    async componentDidMount() {
-        this.fetchHomes();
-        setInterval(async () => {
-            this.fetchHomes()
-        }, 1500);
-    }
-
     render() {
-        return (<Dashboard homes={this.state.homes} />)
+        return (<Dashboard/>)
     }
 }
 
