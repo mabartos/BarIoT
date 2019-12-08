@@ -1,3 +1,6 @@
+//Tile for write temperature and humidity in progress bar
+//Authors Design: Marek Lorinc <xlorin00>
+//	Communication with backend : Maximilian Kosiarcik <xkosia00>
 import React from 'react';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';

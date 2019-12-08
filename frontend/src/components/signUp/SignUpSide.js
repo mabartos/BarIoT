@@ -1,3 +1,5 @@
+//Sign up site
+//Author Marek Lorinc <xlorin00>
 import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';

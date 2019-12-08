@@ -1,3 +1,5 @@
+//Render all room tiles
+//Authors : Maximilian Kosiarcik <xkosia00>
 import React, { Component } from 'react';
 import axios from 'axios';
 import GeneralTile from './GeneralTile';

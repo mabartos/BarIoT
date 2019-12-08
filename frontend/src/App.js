@@ -1,3 +1,5 @@
+//Start page 
+//Author : Martin Bartos <xbarto96>
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import './App.css';

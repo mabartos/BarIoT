@@ -1,3 +1,6 @@
+//Switch (on,off)
+//Authors Design: Marek Lorinc <xlorin00>
+//	Communication with backend : Maximilian Kosiarcik <xkosia00>
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { purple } from '@material-ui/core/colors';

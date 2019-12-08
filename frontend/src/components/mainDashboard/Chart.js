@@ -1,3 +1,4 @@
+//Author: Martin Bartos <xbarto96>
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recharts';
 import Title from './Title';

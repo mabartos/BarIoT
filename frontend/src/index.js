@@ -1,3 +1,5 @@
+/*Main page
+Author: Martin Bartos <xbarto96>*/
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';

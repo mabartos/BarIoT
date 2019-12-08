@@ -1,3 +1,5 @@
+//Authors Design: Marek Lorinc <xlorin00>
+//	Communication with backend : Maximilian Kosiarcik <xkosia00> 
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';

@@ -1,3 +1,7 @@
+//Create new Homes 
+//Authors Design: Marek Lorinc <xlorin00>
+//        Communication with backend : Maximilian Kosiarcik <xkosia00>
+
 import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { Copyright } from './mainDashboard/Dashboard';
@@ -43,7 +47,6 @@ class Homes extends Component {
                 <AddTile name={"Home"} url={'/users/1/homes'} refresh={this.refresh}/>
             </Grid>
 
-            <Copyright />
     </div>
 
 

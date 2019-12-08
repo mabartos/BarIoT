@@ -1,3 +1,5 @@
+//User profile in dashboard
+//Authors Marek Lorinc <xlorin00>,Martin Bartos <xbarto96>
 import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';

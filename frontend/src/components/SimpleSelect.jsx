@@ -1,3 +1,8 @@
+//Helper component to make select in add tile
+// Authors Design: Marek Lorinc <xlorin00>
+//	Communication with backend : Maximilian Kosiarcik <xkosia00>
+
+
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';

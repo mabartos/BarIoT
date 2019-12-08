@@ -1,4 +1,5 @@
 /* eslint-disable no-script-url */
+//Author: Martin Bartos <xbarto96>
 import React from 'react';
 import Link from '@material-ui/core/Link';
 import Title from './Title';

@@ -1,3 +1,5 @@
+//Device tile stats
+//Authors: Marek Lorinc <xlorin00>
 import React, {Component} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';

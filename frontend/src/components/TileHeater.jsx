@@ -1,3 +1,5 @@
+//Device tile for heater
+//Author: Marek Lorinc <xlorin00>
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
