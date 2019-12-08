@@ -61,21 +61,6 @@ public class DeviceModel implements Serializable, Identifiable {
         this.deviceType = deviceType;
     }
 
-    @JsonSetter("type")
-    public void setDeviceTypeByID(Integer deviceType) {
-        if (deviceType != null) {
-            this.deviceType = DeviceType.values()[deviceType];
-            return;
-        }
-        this.deviceType = DeviceType.NONE;
-    }
-
-   /* @JsonGetter("deviceType")
-    public Integer getDeviceTypeID() {
-        return deviceType.ordinal();
-    }
-    */
-
     @Override
     public long getID() {
         return this.id;

@@ -1,6 +1,7 @@
 package org.bariot.backend.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.bariot.backend.general.DeviceType;
 import org.bariot.backend.general.RoomType;
 import org.bariot.backend.persistence.model.DeviceModel;
 import org.bariot.backend.persistence.model.HomeModel;
@@ -144,6 +145,9 @@ public class UpdateHelper<Model extends Identifiable> {
             switch (key) {
                 case "name":
                     res.setName(val);
+                    break;
+                case "type":
+                    res.setDeviceType(DeviceType.valueOf(val.toUpperCase()));
                     break;
             }
             if (parentID != null) {
