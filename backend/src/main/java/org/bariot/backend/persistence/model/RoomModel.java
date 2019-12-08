@@ -3,6 +3,7 @@ package org.bariot.backend.persistence.model;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.bariot.backend.general.RoomType;
 import org.bariot.backend.utils.IBasicInfo;
 import org.bariot.backend.utils.IsUnique;
 import org.hibernate.annotations.LazyCollection;
@@ -10,6 +11,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -39,6 +41,12 @@ public class RoomModel implements Serializable, IBasicInfo<DeviceModel> {
     @JoinColumn(name = "HOME_ID", nullable = false)
     private HomeModel home;
 
+    @Enumerated
+    private RoomType type;
+
+    @Column(name = "IMAGE")
+    private String image;
+
     @OneToMany(targetEntity = DeviceModel.class, mappedBy = "room")
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<DeviceModel> listDevices = new ArrayList<>();
@@ -46,9 +54,11 @@ public class RoomModel implements Serializable, IBasicInfo<DeviceModel> {
     public RoomModel() {
     }
 
-    public RoomModel(String name, HomeModel home) {
+    public RoomModel(String name, HomeModel home, RoomType roomType, String imageName) {
         this.name = name;
         this.home = home;
+        this.type = roomType;
+        this.image = imageName;
     }
 
     @JsonGetter("home")
@@ -82,8 +92,10 @@ public class RoomModel implements Serializable, IBasicInfo<DeviceModel> {
     @Override
     public boolean addToSubSet(DeviceModel item) {
         if (item != null) {
-            if (!IsUnique.itemAlreadyInList(listDevices, item))
+            if (!IsUnique.itemAlreadyInList(listDevices, item)) {
+                item.setRoom(this);
                 listDevices.add(item);
+            }
             return true;
         }
         return false;
@@ -109,6 +121,22 @@ public class RoomModel implements Serializable, IBasicInfo<DeviceModel> {
     @JsonIgnore
     public List<DeviceModel> getAllSubs() {
         return listDevices;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public RoomType getType() {
+        return type;
+    }
+
+    public void setType(RoomType type) {
+        this.type = type;
     }
 
     @Override

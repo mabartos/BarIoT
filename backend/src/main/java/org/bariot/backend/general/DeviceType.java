@@ -4,9 +4,11 @@ public enum DeviceType {
     NONE,
     TEMPERATURE,
     HUMIDITY,
+    HEATER,
     LIGHT,
     RELAY,
-    SWITCH,
+    SOCKET,
     PIR,
-    GAS
+    GAS,
+    STATS
 }

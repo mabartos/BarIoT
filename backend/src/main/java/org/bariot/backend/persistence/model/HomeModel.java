@@ -47,6 +47,9 @@ public class HomeModel implements Serializable, IBasicInfo<RoomModel> {
     @Column(name = "BROKER")
     private String brokerUrl;
 
+    @Column(name = "IMAGE")
+    private String image;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "HOMES_USERS",
             joinColumns = {
@@ -70,14 +73,23 @@ public class HomeModel implements Serializable, IBasicInfo<RoomModel> {
         this.name = name;
     }
 
-    public HomeModel(String name, String brokerUrl) {
+    public HomeModel(String name, String brokerUrl, String imageName) {
         this(name);
         this.brokerUrl = brokerUrl;
+        this.image = imageName;
     }
 
     public void removeHomeFromUser(long userID) {
         Optional<UserModel> opt = usersList.stream().filter(f -> f.getID() == userID).findAny();
         opt.ifPresent(userModel -> userModel.getAllSubs().removeIf(f -> f.getID() == this.getID()));
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     @JsonIgnore

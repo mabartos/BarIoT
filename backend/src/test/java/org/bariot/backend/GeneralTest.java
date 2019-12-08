@@ -102,7 +102,7 @@ public class GeneralTest {
 
     private HomeModel createHomeInDB(String name, String brokerUrl) {
         Assert.assertNotNull(name);
-        HomeModel create = new HomeModel(name, brokerUrl);
+        HomeModel create = new HomeModel(name, brokerUrl,"sdf");
         HomeModel homeCreated = homeService.create(create);
         Assert.assertNotNull(homeCreated);
         Assert.assertEquals(create, homeCreated);
@@ -188,7 +188,7 @@ public class GeneralTest {
         Assert.assertEquals(homeCnt + 1, homeService.getAll().size());
         Assert.assertEquals("10.10.10.2", home2.getBrokerUrl());
 
-        HomeModel tmpHome = new HomeModel("TMP", "BROKER_TMP");
+        HomeModel tmpHome = new HomeModel("TMP", "BROKER_TMP","sdf");
         homeService.update(home2.getID(), tmpHome);
         home2 = homeService.getByID(home2.getID());
         Assert.assertNotNull(home2);

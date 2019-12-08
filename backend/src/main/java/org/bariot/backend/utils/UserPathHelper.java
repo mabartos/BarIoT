@@ -19,7 +19,7 @@ public class UserPathHelper {
         this.userService = userService;
     }
 
-    private <Parent extends IBasicInfo & Identifiable, Child extends IBasicInfo & Identifiable> Child getFromList(Parent parent, long id) {
+    private <Parent extends IBasicInfo & Identifiable, Child extends Identifiable> Child getFromList(Parent parent, long id) {
         if (parent == null)
             return null;
         Optional childOpt = parent.getAllSubs().stream().filter(f -> ((Child) f).getID() == id).findFirst();
@@ -29,7 +29,7 @@ public class UserPathHelper {
     }
 
 
-    public <Model extends IBasicInfo> Model getPath(Long... ids) {
+    public <Model extends Identifiable> Model getPath(Long... ids) {
         UserModel user = null;
         HomeModel home = null;
         RoomModel room = null;

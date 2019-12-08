@@ -24,7 +24,7 @@ import static org.bariot.backend.controller.RoomResource.ROOM_MAPPING;
 @RestController
 public class DeviceResource {
 
-    private static final String DEV_BASIC_URL = ROOM_MAPPING + "/devices";
+    private static final String DEV_BASIC_URL = "/devices";
     private static final String DEV_ID = "/{idDev:[\\d]+}";
 
     public static final String DEV_MAPPING = DEV_BASIC_URL + DEV_ID;

@@ -1,7 +1,9 @@
 package org.bariot.backend.persistence.model;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import org.bariot.backend.general.DeviceType;
 import org.bariot.backend.utils.Identifiable;
@@ -46,15 +48,21 @@ public class DeviceModel implements Serializable, Identifiable {
         this.deviceType = deviceType;
     }
 
+    @JsonIgnore
     public DeviceType getDeviceType() {
         return deviceType;
+    }
+
+    @JsonProperty("type")
+    public String getDeviceTypeJSON() {
+        return deviceType.toString().toLowerCase();
     }
 
     public void setDeviceType(DeviceType deviceType) {
         this.deviceType = deviceType;
     }
 
-    @JsonSetter("deviceType")
+    @JsonSetter("type")
     public void setDeviceTypeByID(Integer deviceType) {
         if (deviceType != null) {
             this.deviceType = DeviceType.values()[deviceType];
@@ -63,10 +71,11 @@ public class DeviceModel implements Serializable, Identifiable {
         this.deviceType = DeviceType.NONE;
     }
 
-    @JsonGetter("deviceType")
+   /* @JsonGetter("deviceType")
     public Integer getDeviceTypeID() {
         return deviceType.ordinal();
     }
+    */
 
     @Override
     public long getID() {

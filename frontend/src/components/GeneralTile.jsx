@@ -228,8 +228,8 @@ export default function GeneralTile(props) {
                 {(() => {
                     if(props.type === 'device'){
                       switch(props.devtype){
-                        case 'temp':
-                        case 'hum' : 
+                        case 'temperature':
+                        case 'humidity' : 
                           return(
                             <ProgressBar type={props.devtype}/>
                          )
@@ -257,7 +257,7 @@ export default function GeneralTile(props) {
                               </CardMedia>
                             </div>
                           )
-                        case 'ac': 
+                        case 'airconditioner': 
                           return(
                             <div>
                               <CardMedia 
