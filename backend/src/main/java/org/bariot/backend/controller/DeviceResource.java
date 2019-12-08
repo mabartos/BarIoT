@@ -3,6 +3,7 @@ package org.bariot.backend.controller;
 import org.bariot.backend.persistence.model.DeviceModel;
 import org.bariot.backend.persistence.model.RoomModel;
 import org.bariot.backend.service.core.GeneralLayeredService;
+import org.bariot.backend.service.core.UserService;
 import org.bariot.backend.utils.responseHelper.GeneralLayeredResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,8 +32,8 @@ public class DeviceResource {
 
     private GeneralLayeredResponse<RoomModel> generalResponse;
 
-    public DeviceResource(GeneralLayeredService generalService) {
-        this.generalResponse = new GeneralLayeredResponse<>(generalService);
+    public DeviceResource(GeneralLayeredService generalService, UserService userService) {
+        this.generalResponse = new GeneralLayeredResponse<>(generalService,userService);
     }
 
     @GetMapping(DEV_BASIC_URL)

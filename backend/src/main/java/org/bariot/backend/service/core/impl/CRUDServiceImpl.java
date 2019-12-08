@@ -1,6 +1,8 @@
 package org.bariot.backend.service.core.impl;
 
+import org.bariot.backend.persistence.model.HomeModel;
 import org.bariot.backend.service.core.CRUDService;
+import org.bariot.backend.utils.HasParent;
 import org.bariot.backend.utils.Identifiable;
 import org.bariot.backend.utils.UpdateHelper;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -59,9 +61,10 @@ public class CRUDServiceImpl<T extends Identifiable> implements CRUDService<T> {
     @Override
     public boolean deleteByID(long id) {
         try {
-            if (getByID(id) == null)
+            T entity = getByID(id);
+            if (entity == null)
                 return false;
-            repo.deleteById(id);
+            repo.delete(entity);
             return true;
         } catch (Exception e) {
             e.printStackTrace();

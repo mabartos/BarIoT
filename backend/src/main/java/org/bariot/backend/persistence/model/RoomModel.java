@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.bariot.backend.general.RoomType;
+import org.bariot.backend.utils.HasParent;
 import org.bariot.backend.utils.IBasicInfo;
 import org.bariot.backend.utils.IsUnique;
 import org.hibernate.annotations.LazyCollection;
@@ -26,7 +27,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "ROOMS")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class RoomModel implements Serializable, IBasicInfo<DeviceModel> {
+public class RoomModel implements Serializable, IBasicInfo<DeviceModel>, HasParent<HomeModel> {
 
     @Id
     @GeneratedValue
@@ -111,6 +112,14 @@ public class RoomModel implements Serializable, IBasicInfo<DeviceModel> {
         this.name = name;
     }
 
+    public boolean removeThisFromHome() {
+        return getParent().getAllUsers().removeIf(f -> f.getID() == this.getID());
+    }
+
+    public boolean removeDevicesFromRoom() {
+        return getAllSubs().removeIf(f -> f.getParent() == this);
+    }
+
     @JsonIgnore
     public List<DeviceModel> getListDevices() {
         return listDevices;
@@ -139,6 +148,17 @@ public class RoomModel implements Serializable, IBasicInfo<DeviceModel> {
     }
 
     @Override
+    @JsonIgnore
+    public HomeModel getParent() {
+        return getHome();
+    }
+
+    @Override
+    public void setParent(HomeModel parent) {
+        setHome(parent);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
@@ -156,6 +176,6 @@ public class RoomModel implements Serializable, IBasicInfo<DeviceModel> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(id, name, getCountOfSub(), getAllSubs());
     }
 }

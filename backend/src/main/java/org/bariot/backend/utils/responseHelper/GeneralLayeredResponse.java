@@ -1,6 +1,7 @@
 package org.bariot.backend.utils.responseHelper;
 
 import org.bariot.backend.service.core.GeneralLayeredService;
+import org.bariot.backend.service.core.UserService;
 import org.bariot.backend.utils.Identifiable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,9 +12,11 @@ import java.util.List;
 public class GeneralLayeredResponse<T extends Identifiable> {
 
     private GeneralLayeredService generalService;
+    private UserService userService;
 
-    public GeneralLayeredResponse(GeneralLayeredService generalService) {
+    public GeneralLayeredResponse(GeneralLayeredService generalService, UserService userService) {
         this.generalService = generalService;
+        this.userService = userService;
     }
 
     public ResponseEntity getAllItems(Long... id) {
@@ -60,6 +63,7 @@ public class GeneralLayeredResponse<T extends Identifiable> {
 
     public ResponseEntity delete(Long... id) {
         if (generalService.delete(id)) {
+            userService.update(id[0], userService.getByID(id[0]));
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cannot delete item");

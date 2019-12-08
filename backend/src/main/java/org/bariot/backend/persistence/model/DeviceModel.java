@@ -3,8 +3,8 @@ package org.bariot.backend.persistence.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import org.bariot.backend.general.DeviceType;
+import org.bariot.backend.utils.HasParent;
 import org.bariot.backend.utils.Identifiable;
 
 import javax.persistence.CascadeType;
@@ -17,11 +17,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Table(name = "DEVICES")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class DeviceModel implements Serializable, Identifiable {
+public class DeviceModel implements Serializable, Identifiable, HasParent<RoomModel> {
 
     @Id
     @GeneratedValue
@@ -86,5 +87,37 @@ public class DeviceModel implements Serializable, Identifiable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    @JsonIgnore
+    public RoomModel getParent() {
+        return getRoom();
+    }
+
+    @Override
+    public void setParent(RoomModel parent) {
+        setRoom(parent);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        else if (!(obj instanceof DeviceModel))
+            return false;
+        else {
+            DeviceModel object = (DeviceModel) obj;
+            return (object.getID() == this.getID()
+                    && object.getName().equals(this.getName())
+                    && object.getDeviceType().equals(this.getDeviceType())
+                    && object.getParent().equals(this.getParent())
+            );
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, deviceType, getParent());
     }
 }

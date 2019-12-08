@@ -9,6 +9,7 @@ import org.bariot.backend.utils.IsUnique;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -58,7 +59,7 @@ public class HomeModel implements Serializable, IBasicInfo<RoomModel> {
     )
     private List<UserModel> usersList=new ArrayList<>();
 
-    @OneToMany(targetEntity = RoomModel.class, mappedBy = "home")
+    @OneToMany(targetEntity = RoomModel.class, mappedBy = "home", cascade = CascadeType.REMOVE)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<RoomModel> roomsList;
 
