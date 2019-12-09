@@ -2,6 +2,7 @@ package org.bariot.backend.persistence.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bariot.backend.general.DedicatedUserRole;
 import org.bariot.backend.general.UserRole;
 import org.bariot.backend.utils.IBasicInfo;
@@ -48,7 +49,7 @@ public class HomeModel implements Serializable, IBasicInfo<RoomModel> {
     private String brokerUrl;
 
     @Column(name = "IMAGE")
-    private String image;
+    private String image="other.jpg";
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "HOMES_USERS",

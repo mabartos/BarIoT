@@ -70,6 +70,7 @@ public class UserHomeServiceImpl implements UserHomeService {
         if (user != null && home != null) {
             if (user.getAllSubs().removeIf(f -> f.equals(home)))
                 userService.update(user.getID(), user);
+            return true;
         }
         return false;
     }

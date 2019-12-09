@@ -45,7 +45,7 @@ public class RoomModel implements Serializable, IBasicInfo<DeviceModel>, HasPare
     private RoomType type;
 
     @Column(name = "IMAGE")
-    private String image;
+    private String image="smartHome.jpg";
 
     @OneToMany(targetEntity = DeviceModel.class, mappedBy = "room")
     @LazyCollection(LazyCollectionOption.FALSE)

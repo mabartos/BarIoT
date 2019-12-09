@@ -67,6 +67,12 @@ class MyForm extends React.Component {
     }
     mySubmitHandler = (event) => {
       event.preventDefault();
+
+      if(!this.state.name){
+        alert("You have to fill name !!");
+        return;
+      }
+
       const data = {
         name: this.state.name,
       };
@@ -76,7 +82,7 @@ class MyForm extends React.Component {
       if (this.state.type) {
         data.type = this.state.type;
       }
-      alert(data.type);
+      //alert(data.type);
       axios.post( this.props.url, data).then(response => {
           this.props.refresh();
       });
@@ -163,6 +169,7 @@ class MyForm extends React.Component {
                   variant="outlined"
                   required
                   fullWidth
+                  
                   id="homeName"
                   label={this.props.name + " name"}
                   autoFocus
