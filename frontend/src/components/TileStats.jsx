@@ -64,7 +64,7 @@ class Chart extends Component{
   render(){
     return(
       <div className="chart" >
-        <p style={{color:"red"}}>Power constuption last 10 days(Wh)</p>
+        <p style={{color:"red"}}>Power consuption last 10 days(Wh)</p>
         <Line
           height = "160"
           data={this.state.chartData}

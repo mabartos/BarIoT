@@ -42,7 +42,7 @@ class Homes extends Component {
 
 
     <div>
-            <Grid container spacing={3}>
+            <Grid container spacing={3} justify="center">
                 {homes}
                 <AddTile name={"Home"} url={'/users/1/homes'} refresh={this.refresh}/>
             </Grid>

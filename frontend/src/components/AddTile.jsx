@@ -103,13 +103,13 @@ class MyForm extends React.Component {
                 image = 'other.jpg';
                 break;
             case 'Kitchen':
-                image = 'kitchen.jpg';
+                image = 'kitchen.png';
                 break;
             case 'Bathroom':
-                image = 'bathroom.jpg';
+                image = 'bathroom.png';
                 break;
             case 'Living room':
-                image = 'livingroom.jpg';
+                image = 'living.png';
                 break;
             case 'Garage':
                 image = 'garage.jpg';
@@ -131,7 +131,7 @@ class MyForm extends React.Component {
                 type = 'heater';
                 break;
             case 'Air conditioner':
-                type = 'ac';
+                type = 'airconditioner';
                 break;
             case 'Socket':
                 type = 'socket';

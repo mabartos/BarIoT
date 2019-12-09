@@ -44,7 +44,7 @@ export default function ProgressBar(props) {
           <Grid item xs={8} >                        
             <CardMedia className={classes.root}>
               {(() => {
-                if(props.type === 'temp'){
+                if(props.type === 'temperature'){
                   return(                  
                     <CircularProgressbar value={value} minValue= {10} maxValue={40} text={`${value}°C`} 
                       styles={{

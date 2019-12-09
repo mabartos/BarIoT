@@ -266,7 +266,7 @@ export default function GeneralTile(props) {
                               </CardMedia>
                             </div>
                           )
-                        case 'airconditioner':
+                        case 'airconditioner':			
                           return(
                             <div>
                               <CardMedia
