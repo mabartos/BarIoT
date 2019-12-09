@@ -11,5 +11,5 @@ public enum DeviceType {
     PIR,
     GAS,
     STATS,
-    AC
+    AIRCONDITIONER
 }
