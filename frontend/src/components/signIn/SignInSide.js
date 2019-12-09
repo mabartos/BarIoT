@@ -14,7 +14,7 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import BackgroundImage from '../../assets/smart.jpg'
-import {withRouter} from 'react-router-dom';
+import { withRouter, useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 
 function Copyright() {
@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme => ({
   },
   image: {
     backgroundImage: `url(${BackgroundImage})`,
-  
+
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
@@ -63,18 +63,19 @@ const useStyles = makeStyles(theme => ({
 
 export default function SignInSide() {
   const classes = useStyles();
-  
+  const history = useHistory();
 
-  const [username,setUsername]=useState('');
-  const [password,setPassword]=useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   //TODO just for testing
-  const verifyLogin=()=>{
-    if(username==="user123" && password==="user123"){
-    }else
-    console.log("FAILED");
+  const verifyLogin = () => {
+    if (username === "user" && password === "password") {
+      history.push("/dashboard");
+    } else{
+      alert("Bad credentials!");
+    }
   }
-
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -118,22 +119,22 @@ export default function SignInSide() {
               label="Remember me"
             />
             <Button
-              type="submit"
+              //type="submit"
               fullWidth
               variant="contained"
               color="primary"
               className={classes.submit}
-              href="/dashboard"
+              //href="/dashboard"
               onClick={verifyLogin}
             >
               Sign In
             </Button>
-            
-              <Grid item>
-                <Link href="/signup" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
+
+            <Grid item>
+              <Link href="/signup" variant="body2">
+                {"Don't have an account? Sign Up"}
+              </Link>
+            </Grid>
             <Box mt={5}>
               <Copyright />
             </Box>
