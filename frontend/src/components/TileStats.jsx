@@ -38,7 +38,7 @@ class Chart extends Component{
         labels: dates,
         datasets:[
           {
-            label:'Consuption',
+            label:'Consumption',
             data:[
               3200,
               2550,
@@ -64,7 +64,7 @@ class Chart extends Component{
   render(){
     return(
       <div className="chart" >
-        <p style={{color:"red"}}>Power consuption last 10 days(Wh)</p>
+        <p style={{color:"red"}}>Power consumption last 10 days(Wh)</p>
         <Line
           height = "160"
           data={this.state.chartData}

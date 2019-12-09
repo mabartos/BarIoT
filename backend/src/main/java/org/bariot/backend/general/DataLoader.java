@@ -38,10 +38,10 @@ public class DataLoader implements ApplicationRunner {
         UserModel user3 = userService.create(new UserModel("user3", "user3"));
         UserModel user4 = userService.create(new UserModel("user4", "user4"));
 
-        HomeModel home1 = homeService.create(new HomeModel("home1","broker.cz","flat.jpg"));
-        HomeModel home2 = homeService.create(new HomeModel("home2", "broker.com","other.jpg"));
-        HomeModel home3 = homeService.create(new HomeModel("home3","house","house.jpg"));
-        HomeModel home4 = homeService.create(new HomeModel("home4", "asdfasdf.cz","flat.jpg"));
+        HomeModel home1 = homeService.create(new HomeModel("Home Brno","broker.cz","flat.jpg"));
+        HomeModel home2 = homeService.create(new HomeModel("Cottage Znojmo ", "broker.com","other.jpg"));
+        HomeModel home3 = homeService.create(new HomeModel("Home 2","house","house.jpg"));
+        HomeModel home4 = homeService.create(new HomeModel("Home 3", "asdfasdf.cz","flat.jpg"));
 
         home1 = userHomeService.addExistingHome(user1.getID(), home1.getID());
         home2 = userHomeService.addExistingHome(user1.getID(), home2.getID());
@@ -57,13 +57,13 @@ public class DataLoader implements ApplicationRunner {
         homeService.update(home4.getID(), home4);
 
 
-        RoomModel home1room1 = roomService.create(new RoomModel("room1", home1,RoomType.KITCHEN,"kitchen.png"));
-        RoomModel home1room2 = roomService.create(new RoomModel("room2", home1,RoomType.LIVING_ROOM,"livingroom.jpg"));
-        RoomModel home1room3 = roomService.create(new RoomModel("room3", home1,RoomType.BATHROOM,"bathroom.png"));
+        RoomModel home1room1 = roomService.create(new RoomModel("Kitchen", home1,RoomType.KITCHEN,"kitchen.png"));
+        RoomModel home1room2 = roomService.create(new RoomModel("Living room", home1,RoomType.LIVING_ROOM,"livingroom.jpg"));
+        RoomModel home1room3 = roomService.create(new RoomModel("Bathroom", home1,RoomType.BATHROOM,"bathroom.png"));
 
-        RoomModel home2room1 = roomService.create(new RoomModel("room1", home2,RoomType.ROOM,"room.jpg"));
-        RoomModel home2room2 = roomService.create(new RoomModel("room2", home2,RoomType.GARAGE,"garage.jpg"));
-        RoomModel home2room3 = roomService.create(new RoomModel("room3", home2,RoomType.BEDROOM,"bedroom.png"));
+        RoomModel home2room1 = roomService.create(new RoomModel("Room 1", home2,RoomType.ROOM,"room.jpg"));
+        RoomModel home2room2 = roomService.create(new RoomModel("Garage", home2,RoomType.GARAGE,"garage.jpg"));
+        RoomModel home2room3 = roomService.create(new RoomModel("Bedroom", home2,RoomType.BEDROOM,"bedroom.png"));
 
         homeService.addToSubSet(home1.getID(), home1room1);
         homeService.addToSubSet(home1.getID(), home1room2);
@@ -74,18 +74,18 @@ public class DataLoader implements ApplicationRunner {
         homeService.addToSubSet(home2.getID(), home2room3);
 
 
-        DeviceModel home1room1device1 = deviceService.create(new DeviceModel("temp", DeviceType.TEMPERATURE));
-        DeviceModel home1room1device2 = deviceService.create(new DeviceModel("hum", DeviceType.HUMIDITY));
-        DeviceModel home1room2device1 = deviceService.create(new DeviceModel("light", DeviceType.LIGHT));
-        DeviceModel home1room2device2 = deviceService.create(new DeviceModel("socket", DeviceType.SOCKET));
-        DeviceModel home1room3device1 = deviceService.create(new DeviceModel("pir", DeviceType.PIR));
-        DeviceModel home1room3device2 = deviceService.create(new DeviceModel("humii", DeviceType.HUMIDITY));
+        DeviceModel home1room1device1 = deviceService.create(new DeviceModel("Temperature", DeviceType.TEMPERATURE));
+        DeviceModel home1room1device2 = deviceService.create(new DeviceModel("Humidity", DeviceType.HUMIDITY));
+        DeviceModel home1room2device1 = deviceService.create(new DeviceModel("Main lights", DeviceType.LIGHT));
+        DeviceModel home1room2device2 = deviceService.create(new DeviceModel("Socket", DeviceType.SOCKET));
+        DeviceModel home1room3device1 = deviceService.create(new DeviceModel("Heater", DeviceType.GAS));
+        DeviceModel home1room3device2 = deviceService.create(new DeviceModel("Humidity 2", DeviceType.HUMIDITY));
 
-        DeviceModel home2room1device1 = deviceService.create(new DeviceModel("temp1", DeviceType.TEMPERATURE));
-        DeviceModel home2room1device2 = deviceService.create(new DeviceModel("temp2", DeviceType.TEMPERATURE));
-        DeviceModel home2room2device1 = deviceService.create(new DeviceModel("hum", DeviceType.HUMIDITY));
-        DeviceModel home2room2device2 = deviceService.create(new DeviceModel("temp_bedroom", DeviceType.TEMPERATURE));
-        DeviceModel home2room3device3 = deviceService.create(new DeviceModel("light", DeviceType.LIGHT));
+        DeviceModel home2room1device1 = deviceService.create(new DeviceModel("Temperature Outdoor", DeviceType.TEMPERATURE));
+        DeviceModel home2room1device2 = deviceService.create(new DeviceModel("Temperature Indoor", DeviceType.TEMPERATURE));
+        DeviceModel home2room2device1 = deviceService.create(new DeviceModel("Humidity", DeviceType.HUMIDITY));
+        DeviceModel home2room2device2 = deviceService.create(new DeviceModel("Temperature aquarium", DeviceType.TEMPERATURE));
+        DeviceModel home2room3device3 = deviceService.create(new DeviceModel("Under lights", DeviceType.LIGHT));
 
         roomService.addToSubSet(home1room1.getID(), home1room1device1);
         roomService.addToSubSet(home1room1.getID(), home1room1device2);
