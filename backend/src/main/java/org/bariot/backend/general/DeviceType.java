@@ -10,5 +10,6 @@ public enum DeviceType {
     SOCKET,
     PIR,
     GAS,
-    STATS
+    STATS,
+    AC
 }
