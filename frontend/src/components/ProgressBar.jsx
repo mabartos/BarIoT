@@ -10,7 +10,12 @@ import CardMedia from '@material-ui/core/CardMedia';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
-
+  root: {
+    minHeight: 230,
+    height:230,
+    paddingTop: "5px", // 16:9
+    backgroundSize: 'cover',
+},
   card: {
       maxWidth: 345,
       background: 'rgba(26,41,128,0.7)',

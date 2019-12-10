@@ -106,7 +106,7 @@ export default function TileLight() {
                   </Grid>
                 </Typography>
               </FormGroup>           
-                <font size="5"  style={{color: 'black'}} align="left">Consuption:</font>
+                <font size="5"  style={{color: 'black'}} align="left">Consumption:</font>
 
                 <p><font size="6"  style={{color: `rgb(${power/12}, ${(255-power/8)}, 0)`}} >{power}W</font> </p>                   
               <div className={classes.margin} />

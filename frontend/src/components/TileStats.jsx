@@ -10,6 +10,7 @@ import {Bar, Line} from 'react-chartjs-2';
 
 const useStyles = makeStyles(theme => ({
   root: {
+    paddingLeft:"20px",
     width: 80 + theme.spacing(3) * 2,
   },
   margin: {

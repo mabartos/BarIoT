@@ -76,44 +76,97 @@ public class DataLoader implements ApplicationRunner {
 
         DeviceModel home1room1device1 = deviceService.create(new DeviceModel("Temperature", DeviceType.TEMPERATURE));
         DeviceModel home1room1device2 = deviceService.create(new DeviceModel("Humidity", DeviceType.HUMIDITY));
+        DeviceModel home1room1device3 = deviceService.create(new DeviceModel("Socket", DeviceType.SOCKET));
+        DeviceModel home1room1device4 = deviceService.create(new DeviceModel("Stats", DeviceType.STATS));
+        DeviceModel home1room1device5 = deviceService.create(new DeviceModel("Lights", DeviceType.LIGHT));
+        
+        
         DeviceModel home1room2device1 = deviceService.create(new DeviceModel("Main lights", DeviceType.LIGHT));
         DeviceModel home1room2device2 = deviceService.create(new DeviceModel("Socket", DeviceType.SOCKET));
+        DeviceModel home1room2device3 = deviceService.create(new DeviceModel("Air Conditioner", DeviceType.AIRCONDITIONER));
+        DeviceModel home1room2device4 = deviceService.create(new DeviceModel("GAS", DeviceType.GAS));
+        
+        
         DeviceModel home1room3device1 = deviceService.create(new DeviceModel("Heater", DeviceType.GAS));
         DeviceModel home1room3device2 = deviceService.create(new DeviceModel("Humidity 2", DeviceType.HUMIDITY));
+        DeviceModel home1room3device3 = deviceService.create(new DeviceModel("Temperature", DeviceType.TEMPERATURE));
 
         DeviceModel home2room1device1 = deviceService.create(new DeviceModel("Temperature Outdoor", DeviceType.TEMPERATURE));
         DeviceModel home2room1device2 = deviceService.create(new DeviceModel("Temperature Indoor", DeviceType.TEMPERATURE));
+        DeviceModel home2room1device3 = deviceService.create(new DeviceModel("Statistics", DeviceType.STATS));
+        DeviceModel home2room1device4 = deviceService.create(new DeviceModel("Heater", DeviceType.HEATER));
+        DeviceModel home2room1device5 = deviceService.create(new DeviceModel("Air conditioner", DeviceType.AIRCONDITIONER));
+        
+        
         DeviceModel home2room2device1 = deviceService.create(new DeviceModel("Humidity", DeviceType.HUMIDITY));
         DeviceModel home2room2device2 = deviceService.create(new DeviceModel("Temperature aquarium", DeviceType.TEMPERATURE));
-        DeviceModel home2room3device3 = deviceService.create(new DeviceModel("Under lights", DeviceType.LIGHT));
+        DeviceModel home2room2device3 = deviceService.create(new DeviceModel("Statistics", DeviceType.STATS));
+
+
+        DeviceModel home2room3device1 = deviceService.create(new DeviceModel("Under lights", DeviceType.LIGHT));
+        DeviceModel home2room3device2 = deviceService.create(new DeviceModel("Main lights", DeviceType.LIGHT));
+        DeviceModel home2room3device3 = deviceService.create(new DeviceModel("Stats", DeviceType.STATS));
 
         roomService.addToSubSet(home1room1.getID(), home1room1device1);
         roomService.addToSubSet(home1room1.getID(), home1room1device2);
+        roomService.addToSubSet(home1room1.getID(), home1room1device3);
+        roomService.addToSubSet(home1room1.getID(), home1room1device4);
+        roomService.addToSubSet(home1room1.getID(), home1room1device5);
+
 
         roomService.addToSubSet(home1room2.getID(), home1room2device1);
         roomService.addToSubSet(home1room2.getID(), home1room2device2);
+        roomService.addToSubSet(home1room2.getID(), home1room2device3);
+        roomService.addToSubSet(home1room2.getID(), home1room2device4);
+
 
         roomService.addToSubSet(home1room3.getID(), home1room3device1);
         roomService.addToSubSet(home1room3.getID(), home1room3device2);
+        roomService.addToSubSet(home1room3.getID(), home1room3device3);
+
 
         roomService.addToSubSet(home2room1.getID(), home2room1device1);
         roomService.addToSubSet(home2room1.getID(), home2room1device2);
+        roomService.addToSubSet(home2room1.getID(), home2room1device3);
+        roomService.addToSubSet(home2room1.getID(), home2room1device4);
+        roomService.addToSubSet(home2room1.getID(), home2room1device5);
+
 
         roomService.addToSubSet(home2room2.getID(), home2room2device1);
         roomService.addToSubSet(home2room2.getID(), home2room2device2);
-
+        roomService.addToSubSet(home2room2.getID(), home2room2device3);
+        
+        roomService.addToSubSet(home2room3.getID(), home2room3device1);
+        roomService.addToSubSet(home2room3.getID(), home2room3device2);
         roomService.addToSubSet(home2room3.getID(), home2room3device3);
 
         deviceService.update(home1room1device1.getID(), home1room1device1);
         deviceService.update(home1room1device2.getID(), home1room1device2);
+        deviceService.update(home1room1device3.getID(), home1room1device3);
+        deviceService.update(home1room1device4.getID(), home1room1device4);
+        deviceService.update(home1room1device5.getID(), home1room1device5);
+
         deviceService.update(home1room2device1.getID(), home1room2device1);
         deviceService.update(home1room2device2.getID(), home1room2device2);
+        deviceService.update(home1room2device3.getID(), home1room2device3);
+        deviceService.update(home1room2device4.getID(), home1room2device4);
+
         deviceService.update(home1room3device1.getID(), home1room3device1);
         deviceService.update(home1room3device2.getID(), home1room3device2);
+        deviceService.update(home1room3device3.getID(), home1room3device3);
+
         deviceService.update(home2room1device1.getID(), home2room1device1);
         deviceService.update(home2room1device2.getID(), home2room1device2);
+        deviceService.update(home2room1device3.getID(), home2room1device3);
+        deviceService.update(home2room1device4.getID(), home2room1device4);
+        deviceService.update(home2room1device5.getID(), home2room1device5);
+
         deviceService.update(home2room2device1.getID(), home2room2device1);
         deviceService.update(home2room2device2.getID(), home2room2device2);
+        deviceService.update(home2room2device3.getID(), home2room2device3);
+
+        deviceService.update(home2room3device1.getID(), home2room3device1);
+        deviceService.update(home2room3device2.getID(), home2room3device2);
         deviceService.update(home2room3device3.getID(), home2room3device3);
 
     }

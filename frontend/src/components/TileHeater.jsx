@@ -15,6 +15,11 @@ import FormGroup from '@material-ui/core/FormGroup';
 import { fontSize } from '@material-ui/system';
 
 const useStyles = makeStyles(theme => ({
+  media: {
+    minHeight: 280,
+    paddingTop: '56.25%', // 16:9
+    backgroundSize: 'cover',
+},
   root: {
     width: 80 + theme.spacing(3) * 2,
   },

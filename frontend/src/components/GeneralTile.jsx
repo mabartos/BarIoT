@@ -55,8 +55,14 @@ const useStyles = makeStyles(theme => ({
         color: 'white',
         fontSize: 'large'
     },
+    root: {
+      minHeight: 230,
+      height:250,
+      paddingTop: "30px", // 16:9
+      backgroundSize: 'cover',
+  },
     media: {
-        minHeight: 0,
+        minHeight: 250,
         paddingTop: '56.25%', // 16:9
         backgroundSize: 'cover',
     },
@@ -240,7 +246,7 @@ export default function GeneralTile(props) {
                         case 'temperature':
                         case 'humidity' :
                           return(
-                            <ProgressBar type={props.devtype}/>
+                            <ProgressBar className={classes.root} type={props.devtype}/>
                          )
                         case 'light':
                           return(
@@ -312,8 +318,8 @@ export default function GeneralTile(props) {
                           style={{backgroundImage:`url(${bg})`,
                           backgroundPosition: "center",
                           backgroundRepeat: "no-repeat",
-                          backgroundSize: "cover",
-                        height:"100px"}}
+                          backgroundSize: "cover"
+                       }}
                           onClick={click}
                         />
                       )

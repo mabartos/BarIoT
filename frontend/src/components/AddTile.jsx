@@ -19,18 +19,20 @@ import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
     root: {
+      height:250,
+      backgroundSize: 'cover',
         flexGrow: 1,
     },
     paper: {
-        padding: theme.spacing(1),
+        padding: "30px",
         textAlign: 'center',
         color: 'black',
+        height:250
     },
     container: {
         display: 'flex',
         overflow: 'auto',
         flexDirection: 'column',
-        height: 240,
     },
     card: {
         minWidth: 290,
@@ -200,7 +202,7 @@ export default function AddTile(props) {
     }
 
     return (
-        <Grid item xs={12} md={4} spacing={2}>
+        <Grid className={classes.root} item xs={12} md={4} spacing={2}>
             <Card button className={classes.card} >
                 <CardHeader
                     classes={{ title: classes.cardTitle }}
