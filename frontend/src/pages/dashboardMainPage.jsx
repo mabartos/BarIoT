@@ -11,9 +11,15 @@ class DashboardMainPage extends React.Component {
         }
     }
 
-    render() {
-        return (<Dashboard/>)
+    componentDidMount() {
+      axios.get( '/users/1/homes').then(response => {
+          this.setState({ homes: response.data })
+      });
     }
+    render() {
+        return (<Dashboard homes={this.state.homes}/>)
+    }
+
 }
 
 export default DashboardMainPage;
