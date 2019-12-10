@@ -176,7 +176,7 @@ export default function Dashboard(props) {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             SmartHome Dashboard
           </Typography>
-          
+
         </Toolbar>
       </AppBar>
        <Drawer
@@ -211,15 +211,19 @@ export default function Dashboard(props) {
           </ListItem>
         <Collapse in={open_h} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItem
-            component={Link} to={"/dashboard/home/1"}
-           button className={classes.nested} button
-          >
-            <ListItemIcon>
-              <HomeIcon />
-            </ListItemIcon>
-            <ListItemText primary="Home_1" />
-          </ListItem>
+
+        {props.homes.map(home => (
+                    <ListItem
+                      component={Link} to={"/dashboard/home/"+home.id}
+                     button
+                       className={classes.nested} button>
+                    <ListItemIcon>
+                      <HomeIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={home.name} />
+                  </ListItem>
+              ))}
+
         </List>
       </Collapse>
       <ListItem
