@@ -60,6 +60,7 @@ const useStyles = makeStyles(theme => ({
       height:250,
       paddingTop: "30px", // 16:9
       backgroundSize: 'cover',
+      padding:"10px"
   },
     media: {
         minHeight: 250,

@@ -271,7 +271,6 @@ export default function Dashboard(props) {
             </div>}/>
           </Switch>
 
-          <Copyright />
         </main>
       </div>
 
